@@ -12,14 +12,12 @@ router.post('/sign-up', userController.postSignUpPage);
 
 router.post('/sign-in', userController.postSignInPage);
 
-router.get('/cart', userController.getCartPage);
-
-router.post('/add-to-cart', userController.postAddToCart);
-
-router.post('/remove-from-cart/', userController.postRemoveFromCart);
-
-router.post('/increase-quantity', userController.postIncreaseCartQuantity)
-
 router.get('/user-panel', userController.getUserPanelPage);
+
+router.post('/edit-username', userController.postEditUsername);
+
+router.post('/edit-email', userController.postEditEmail);
+
+router.post('/edit-password', userController.postEditPassword);
 
 module.exports = router;

@@ -1,0 +1,9 @@
+@import 'config';
+
+.product-detail {
+  color: $dark-blue;
+
+  p {
+    font-size: $secondary-font-size;
+  }
+}

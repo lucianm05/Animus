@@ -1,0 +1,49 @@
+@import 'config';
+
+.product-list {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  place-items: center;
+
+  li {
+    display: inline-block;
+  }
+
+  .product-card {
+    width: 15rem;
+    background-color: white;
+
+    p {
+      width: 100%;
+      background-color: $yellow;
+      color: $dark-blue;
+      padding: 10px;
+      font-size: $main-font-size;
+
+      &:nth-of-type(1) {
+        height: 6rem;
+      }
+
+      &:nth-of-type(2) {
+        height: 3rem;
+      }
+    }
+
+    img {
+      width: 15rem;
+      height: 100%;
+      margin: 0 auto;
+      padding: 5px 0;
+    }
+
+    button {
+      width: 100%;
+      margin: 0 auto;
+    }
+  }
+
+  
+}
+

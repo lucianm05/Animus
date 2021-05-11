@@ -1,0 +1,36 @@
+<%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+  <%- include('../includes/navigation.ejs') %>
+  <main>
+    <div class='text-center'>
+      <% if (products.length > 0) { %>
+        <ul class='product-list'>
+          <% products.forEach(prod => { %>
+              <li>
+                <div class='product-card'>
+                  <p class='m-auto'><%= prod.name %></p>
+                  <img class='product-image' src='<%= prod.image %>' alt='<%= prod.name %>'>
+                  <p><%= prod.price %> RON</p>
+                  <div class='d-flex align-items-center justify-content-center'>
+                    <form class='w-100' action='/add-to-cart' method='POST'>
+                      <button type='submit' href='/' class='button'>Adaugă în coș</button>
+                      <input type="hidden" name='prodId' id='prodId' value='<%= prod.id %>'>
+                      <input type="hidden" name="prodName" id='prodName' value='<%= prod.name %>'>
+                      <input type="hidden" name="prodPrice" value='<%= prod.price %>'>
+                      <input type="hidden" name="prodImage" value='<%= prod.image %>'>
+                    </form>
+                  </div>
+                </div>
+              </li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <h1>Nu există produse.</h1>
+      <% } %>
+    </div>
+  </main>
+
+<%- include('../includes/end.ejs') %>

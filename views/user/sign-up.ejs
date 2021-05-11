@@ -1,0 +1,34 @@
+<%- include('../includes/head.ejs') %>
+</head>
+
+<body>
+  <%- include('../includes/navigation.ejs') %>
+  <main>
+    <div class='contaier'>
+      <div class='row text-center m-auto'>
+        <form class='custom-form' action='/sign-up' method='POST' class="form-control">
+          <div class='m-3'>
+            <label for="username" class='d-block'>Nume de utilizator:</label>
+            <input type="text" name='username' id='username' required>
+          </div>
+          <div class='m-3'>
+            <label for="email" class='d-block'>Email:</label>
+            <input type="email" name='email' id='email' required>
+          </div>
+          <div class='m-3'>
+            <label for="password" class='d-block'>Parola:</label>
+            <input type="password" name='password' id='password' required>
+          </div>
+
+          <button type='submit' class="button m-3">Trimite</button>
+        </form>
+
+        <div class='row text-center m-auto'>
+          <p>Aveți deja un cont?</p>
+          <a href='/sign-in'>Către autentificare</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+<%- include('../includes/end.ejs') %>

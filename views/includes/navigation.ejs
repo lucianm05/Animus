@@ -1,0 +1,86 @@
+<header>
+  <nav class="navbar">
+    <ul class="navbar__top">
+      <div class="container-fluid">
+        <div class="row align-items-center">
+          <li class="col-2 col-md-1 col-lg-2">
+            <a href="/"> <%- include('../includes/logo.ejs') %> </a>
+          </li>
+          <li class="col-6 col-md-5 col-lg-6" class="text-center">
+            <form action="/search" method="POST">
+              <div class="d-flex align-items-center justify-content-center">
+                <input type="text" name="searchParams" placeholder="Caută" />
+                <button type="submit" class="align-self-center">
+                  <svg focusable="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search align-self-center" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </li>
+          <li class="col-2 col-md-3 col-lg-2">
+            <% if(user.name) { %>
+              <div class='d-flex align-items-center justify-content-center'>
+                <p>Salut, <%= user.name %></p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+                </svg>
+              </div>
+            <% } else { %>
+              <a href="/sign-in">
+                <div class="d-flex align-items-center justify-content-center">
+                  <svg focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#333652" class="bi bi-box-arrow-in-right d-md-block d-none" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z" />
+                    <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
+                  </svg>
+                  <svg focusable="false" xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-box-arrow-in-right d-md-none d-block" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z" />
+                    <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
+                  </svg>
+                  <p class="px-1 d-none d-md-block">Intră în cont</p>
+                </div>
+              </a>
+            <% } %>
+          </li>
+          <li class="col-2 col-md-3 col-lg-2">
+            <a href="/cart">
+              <div class="d-flex align-items-center justify-content-center position-relative">
+                <% if (user.name) { %>
+                  <div class='cart-items-count'>
+                    <p class='rounded-circle'><%= cart.length %></p>
+                  </div>
+                <% } else { %>
+                  
+                <% } %>
+                <svg focusable="false" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#333652" class="bi bi-basket d-md-block d-none" viewBox="0 0 16 16">
+                  <path
+                    d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07 1.243a.5.5 0 0 1 .686-.172zM2 9v4.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9H2zM1 7v1h14V7H1zm3 3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 4 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 6 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z"
+                  />
+                </svg>
+                <svg focusable="false" xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-basket d-md-none d-block" viewBox="0 0 16 16">
+                  <path
+                    d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07 1.243a.5.5 0 0 1 .686-.172zM2 9v4.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9H2zM1 7v1h14V7H1zm3 3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 4 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 6 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z"
+                  />
+                </svg>
+                <p class="px-1 d-none d-md-block">Coș</p>
+              </div>
+            </a>
+          </li>
+        </div>
+      </div>
+    </ul>
+    <ul class="navbar__bottom px-2">
+      <div class="container-fluid">
+        <div class="row align-items-center justify-content-center">
+          <li class="col p-1"><a href="/produse/caini">Câini</a></li>
+          <li class="col p-1"><a href="/produse/pisici">Pisici</a></li>
+          <li class="col p-1"><a href="/produse/cai">Cai</a></li>
+          <li class="col p-1"><a href="/produse/pesti">Pești</a></li>
+          <li class="col p-1"><a href="/produse/pasari">Păsări</a></li>
+          <li class="col p-1"><a href="/produse/reptile">Reptile</a></li>
+          <li class="col p-1"><a href="/produse/rozatoare">Rozătoare</a></li>
+        </div>
+      </div>
+    </ul>
+  </nav>
+</header>

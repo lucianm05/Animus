@@ -290,7 +290,7 @@ exports.getProductDetailPage = (req, res, next) => {
       Product.findByPk(productId)
         .then((product) => {
           res.render('shop/product-detail.ejs', {
-            pageTitle: product.name,
+            pageTitle: 'Animus',
             user: user,
             cart: cart,
             product: product,

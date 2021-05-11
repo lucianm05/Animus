@@ -16,6 +16,7 @@ const Cart = require('./models/Cart');
 const CartItem = require('./models/Cart-Item');
 const Order = require('./models/Order');
 const OrderItem = require('./models/Order-Item');
+const UserAddress = require('./models/User-Address');
 
 app.use((req, res, next) => {
   User.findByPk(1)
@@ -43,6 +44,7 @@ User.hasOne(Cart);
 Product.belongsToMany(Cart, { through: CartItem });
 User.hasMany(Order);
 Order.belongsToMany(Product, { through: OrderItem });
+User.hasMany(UserAddress);
 
 sequelize
   // .sync({force: true})

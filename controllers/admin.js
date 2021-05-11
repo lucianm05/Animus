@@ -8,7 +8,7 @@ exports.getAddProductPage = (req, res, next) => {
   let loggedIn = false;
   let cart = [];
 
-  // Luăm cartul pentru a determina numărul de produse din coș, care este afișat în navbar
+  // Luăm coșul de cumpărături pentru a determina numărul de produse din coș, care este afișat în navbar
   Cart.findOne({ where: { userId: user.id } })
     .then((cart) => {
       return CartItem.findAll({ where: { cartId: cart.id } });

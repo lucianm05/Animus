@@ -20,4 +20,6 @@ router.post('/remove-from-cart/', userController.postRemoveFromCart);
 
 router.post('/increase-quantity', userController.postIncreaseCartQuantity)
 
+router.get('/user-panel', userController.getUserPanelPage);
+
 module.exports = router;

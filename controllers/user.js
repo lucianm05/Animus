@@ -206,3 +206,34 @@ exports.postIncreaseCartQuantity = (req, res, next) => {
     })
     .catch((error) => console.log(error));
 };
+
+exports.getUserPanelPage = (req, res, next) => {
+  const user = userUtil.returnUser(req, res, next);
+  let loggedIn = false;
+  let cart = [];
+
+  Cart.findOne({ where: { userId: user.id } })
+    .then((cart) => {
+      return CartItem.findAll({ where: { cartId: cart.id } });
+    })
+    .then((cartItems) => {
+      cartItems.forEach((item) => {
+        cart.push({
+          name: item.dataValues.name,
+        });
+
+        return cart;
+      });
+    })
+    .then((result) => {
+      User.findByPk(user.id)
+        .then((user) => {
+          res.render('user/user-panel.ejs', {
+            user: user,
+            pageTitle: 'Panoul utilizatorului',
+            cart: cart,
+          });
+        })
+        .catch((error) => console.log(error));
+    });
+};

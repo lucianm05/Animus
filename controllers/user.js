@@ -4,16 +4,24 @@ const Cart = require('../models/Cart');
 const CartItem = require('../models/Cart-Item');
 
 exports.getSignUpPage = (req, res, next) => {
+  const user = userUtil.returnUser(req, res, next);
+  const cart = userUtil.returnCart(req, res, next);
+
   res.render('user/sign-up.ejs', {
     pageTitle: 'Înregistrare',
-    user: req.user,
+    user: user,
+    cart: cart,
   });
 };
 
 exports.getSignInPage = (req, res, next) => {
+  const user = userUtil.returnUser(req, res, next);
+  const cart = userUtil.returnCart(req, res, next);
+
   res.render('user/sign-in.ejs', {
     pageTitle: 'Autentificare',
-    user: req.user,
+    user: user,
+    cart: cart,
   });
 };
 
@@ -54,32 +62,15 @@ exports.postSignInPage = (req, res, next) => {
 
 exports.getUserPanelPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
-  let loggedIn = false;
-  let cart = [];
+  const cart = userUtil.returnCart(req, res, next);
 
-  Cart.findOne({ where: { userId: user.id } })
-    .then((cart) => {
-      return CartItem.findAll({ where: { cartId: cart.id } });
-    })
-    .then((cartItems) => {
-      cartItems.forEach((item) => {
-        cart.push({
-          name: item.dataValues.name,
-        });
-
-        return cart;
+  User.findByPk(user.id)
+    .then((user) => {
+      res.render('user/user-panel.ejs', {
+        user: user,
+        pageTitle: 'Panoul utilizatorului',
+        cart: cart,
       });
-    })
-    .then((result) => {
-      User.findByPk(user.id)
-        .then((user) => {
-          res.render('user/user-panel.ejs', {
-            user: user,
-            pageTitle: 'Panoul utilizatorului',
-            cart: cart,
-          });
-        })
-        .catch((error) => console.log(error));
     })
     .catch((error) => console.log(error));
 };

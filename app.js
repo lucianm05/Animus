@@ -27,6 +27,21 @@ app.use((req, res, next) => {
     .catch((error) => console.log(error));
 });
 
+app.use((req, res, next) => {
+  if(req.user) {
+    return Cart.findOne({ where: { userId: req.user.id } })
+    .then((cart) => {
+      return CartItem.findAll({ where: { cartId: cart.id } });
+    })
+    .then((cartItems) => {
+      req.cart = cartItems;
+      next();
+    });
+  }
+
+  return next();
+})
+
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(process.cwd(), 'public')));

@@ -2,8 +2,21 @@
 
 .product-detail {
   color: $dark-blue;
+  margin-bottom: 50px;
 
   p {
     font-size: $secondary-font-size;
+  }
+}
+
+.custom-break {
+  background-color: $dark-blue;
+  height: 55px;
+  width: 100%;
+
+  p {
+    color: $yellow;
+    font-size: $main-font-size;
+    margin: 0 auto;
   }
 }

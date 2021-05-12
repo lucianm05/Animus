@@ -6,116 +6,68 @@ const { Op } = require('sequelize');
 
 exports.getIndexPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
+  const cart = userUtil.returnCart(req, res, next);
   let products = [];
-  let cart = [];
 
-  // Luăm coșul de cumpărături pentru a determina numărul de produse din coș, care este afișat în navbar
-  Cart.findOne({ where: { userId: user.id } })
-    .then((cart) => {
-      return CartItem.findAll({ where: { cartId: cart.id } });
-    })
-    .then((cartItems) => {
-      cartItems.forEach((item) => {
-        cart.push({
-          name: item.dataValues.name,
-        });
-
-        return cart;
-      });
+  Product.findAll()
+    .then((result) => {
+      return (products = result);
     })
     .then((result) => {
-      Product.findAll()
-        .then((result) => {
-          return (products = result);
-        })
-        .then((result) => {
-          res.render('shop/index.ejs', {
-            pageTitle: 'Animus',
-            user: user,
-            products: products,
-            cart: cart,
-          });
-        })
-        .catch((error) => console.log(error));
-    });
+      res.render('shop/index.ejs', {
+        pageTitle: 'Animus',
+        user: user,
+        products: products,
+        cart: cart,
+      });
+    })
+    .catch((error) => console.log(error));
 };
 
 exports.getAnimalCategoryPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
+  const cart = userUtil.returnCart(req, res, next);
   const animalCategory = req.params.category;
   const title = animalCategory.charAt(0).toUpperCase() + animalCategory.slice(1);
   let products = [];
-  let cart = [];
 
-  // Luăm coșul de cumpărături pentru a determina numărul de produse din coș, care este afișat în navbar
-  Cart.findOne({ where: { userId: user.id } })
-    .then((cart) => {
-      return CartItem.findAll({ where: { cartId: cart.id } });
-    })
-    .then((cartItems) => {
-      cartItems.forEach((item) => {
-        cart.push({
-          name: item.dataValues.name,
-        });
-
-        return cart;
-      });
+  Product.findAll({ where: { animalCategory: animalCategory } })
+    .then((result) => {
+      return (products = result);
     })
     .then((result) => {
-      Product.findAll({ where: { animalCategory: animalCategory } })
-        .then((result) => {
-          return (products = result);
-        })
-        .then((result) => {
-          res.render('shop/product-category.ejs', {
-            pageTitle: title,
-            user: user,
-            products: products,
-            cart: cart,
-            animalCategory: animalCategory,
-          });
-        })
-        .catch((error) => console.log(error));
-    });
+      res.render('shop/product-category.ejs', {
+        pageTitle: title,
+        user: user,
+        products: products,
+        cart: cart,
+        animalCategory: animalCategory,
+      });
+    })
+    .catch((error) => console.log(error));
 };
 
 exports.getSearch = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
+  const cart = userUtil.returnCart(req, res, next);
   const searchParams = req.body.searchParams.split(' ');
-  let cart = [];
 
-  // Luăm coșul de cumpărături pentru a determina numărul de produse din coș, care este afișat în navbar
-  Cart.findOne({ where: { userId: user.id } })
-    .then((cart) => {
-      return CartItem.findAll({ where: { cartId: cart.id } });
-    })
-    .then((cartItems) => {
-      cartItems.forEach((item) => {
-        cart.push({
-          name: item.dataValues.name,
-        });
-
-        return cart;
+  Product.findAll({ where: { name: { [Op.like]: '%' + searchParams[0] + '%' } } })
+    .then((result) => {
+      res.render('shop/index.ejs', {
+        pageTitle: 'Rezultatele căutării',
+        user: user,
+        products: result,
+        cart: cart,
       });
     })
-    .then((result) => {
-      Product.findAll({ where: { name: { [Op.like]: '%' + searchParams[0] + '%' } } })
-        .then((result) => {
-          res.render('shop/index.ejs', {
-            pageTitle: 'Rezultatele căutării',
-            user: user,
-            products: result,
-            cart: cart,
-          });
-        })
-        .catch((error) => console.log(error));
-    });
+    .catch((error) => console.log(error));
 };
 
 exports.getCartPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
-  let loggedIn = false;
   let cart = [];
+  let loggedIn = false;
   let totalCartPrice = 0;
 
   if (user.name) {
@@ -170,7 +122,7 @@ exports.postAddToCart = (req, res, next) => {
   let fetchedCart;
   let newQuantity = 1;
   let newPrice = prodPrice;
-  console.log(req.query);
+
   if (user.name) {
     loggedIn = true;
   }
@@ -269,34 +221,17 @@ exports.postIncreaseCartQuantity = (req, res, next) => {
 
 exports.getProductDetailPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
+  const cart = userUtil.returnCart(req, res, next);
   const productId = req.params.prodId;
-  console.log(productId);
-  let cart = [];
 
-  Cart.findOne({ where: { userId: user.id } })
-    .then((cart) => {
-      return CartItem.findAll({ where: { cartId: cart.id } });
-    })
-    .then((cartItems) => {
-      cartItems.forEach((item) => {
-        cart.push({
-          name: item.dataValues.name,
-        });
-
-        return cart;
+  Product.findByPk(productId)
+    .then((product) => {
+      res.render('shop/product-detail.ejs', {
+        pageTitle: 'Animus',
+        user: user,
+        cart: cart,
+        product: product,
       });
-    })
-    .then((result) => {
-      Product.findByPk(productId)
-        .then((product) => {
-          res.render('shop/product-detail.ejs', {
-            pageTitle: 'Animus',
-            user: user,
-            cart: cart,
-            product: product,
-          });
-        })
-        .catch((error) => console.log(error));
     })
     .catch((error) => console.log(error));
 };

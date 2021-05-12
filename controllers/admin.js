@@ -5,55 +5,41 @@ const CartItem = require('../models/Cart-Item');
 
 exports.getAddProductPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
+  const cart = userUtil.returnCart(req, res, next);
   let loggedIn = false;
-  let cart = [];
 
   // Luăm coșul de cumpărături pentru a determina numărul de produse din coș, care este afișat în navbar
-  Cart.findOne({ where: { userId: user.id } })
-    .then((cart) => {
-      return CartItem.findAll({ where: { cartId: cart.id } });
-    })
-    .then((cartItems) => {
-      cartItems.forEach((item) => {
-        cart.push({
-          name: item.dataValues.name,
-        });
 
-        return cart;
-      });
-    })
-    .then((result) => {
-      // Verificăm dacă utilizatorul este autentificat
-      if (user.name) {
-        loggedIn = true;
-      }
+  // Verificăm dacă utilizatorul este autentificat
+  if (user.name) {
+    loggedIn = true;
+  }
 
-      if (!loggedIn) {
-        if (!loggedIn) {
-          return res.render('notAuth.ejs', {
-            pageTitle: 'Nu sunteți autentificat!',
-            user: user,
-            cart: cart,
-          });
-        }
-      }
-
-      // Verificăm dacă utilizatorul are acces la pagina destinată adminilor
-      if (user.admin) {
-        return res.render('admin/add-product.ejs', {
-          pageTitle: 'Adăugați un produs',
-          user: user,
-          cart: cart,
-        });
-      }
-
-      // Dacă nu este admin, se afișează o pagină de eroare
-      res.status(404).render('404.ejs', {
-        pageTitle: 'Not Found',
+  if (!loggedIn) {
+    if (!loggedIn) {
+      return res.render('notAuth.ejs', {
+        pageTitle: 'Nu sunteți autentificat!',
         user: user,
         cart: cart,
       });
+    }
+  }
+
+  // Verificăm dacă utilizatorul are acces la pagina destinată adminilor
+  if (user.admin) {
+    return res.render('admin/add-product.ejs', {
+      pageTitle: 'Adăugați un produs',
+      user: user,
+      cart: cart,
     });
+  }
+
+  // Dacă nu este admin, se afișează o pagină de eroare
+  res.status(404).render('404.ejs', {
+    pageTitle: 'Not Found',
+    user: user,
+    cart: cart,
+  });
 };
 
 exports.postAddProductPage = (req, res, next) => {

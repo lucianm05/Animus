@@ -1,7 +1,6 @@
+const fetch = require('node-fetch');
 const userUtil = require('../util/userUtil');
 const User = require('../models/User');
-const Cart = require('../models/Cart');
-const CartItem = require('../models/Cart-Item');
 
 exports.getSignUpPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
@@ -66,11 +65,22 @@ exports.getUserPanelPage = (req, res, next) => {
 
   User.findByPk(user.id)
     .then((user) => {
-      res.render('user/user-panel.ejs', {
-        user: user,
-        pageTitle: 'Panoul utilizatorului',
-        cart: cart,
-      });
+      fetch('https://roloca.coldfuse.io/judete')
+        .then((result) => {
+          result
+            .json()
+            .then((states) => {
+              console.log(states);
+              res.render('user/user-panel.ejs', {
+                user: user,
+                pageTitle: 'Panoul utilizatorului',
+                cart: cart,
+                states: states,
+              });
+            })
+            .catch((error) => console.log(error));
+        })
+        .catch((error) => console.log(error));
     })
     .catch((error) => console.log(error));
 };

@@ -1,76 +1,157 @@
 <%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/user-panel.css">
 </head>
 
 <body>
   <%- include('../includes/navigation.ejs') %>
   <main>
-    <div>
+    <div class='user-panel'>
       <% if (user.name) { %>
-        <div class='my-5'>
+        <section class='edit-info mb-5 text-center'>
           <h1>Panoul utilizatorului</h1>
-          <form class='my-4' action='/edit-username' method='POST'>
-            <label class='d-block'>Schimbare nume utilizator</label>
-            <input type="text" name='name' value='<%= user.name %>'>
-            <button type='submit'>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-              </svg>
-            </button>
+          <form class='my-3' action='/edit-username' method='POST'>
+            <div>
+              <label class='d-block'>Schimbare nume utilizator</label>
+              <div class='d-flex flex-row align-items-center justify-content-center'>
+                <input type="text" name='name' value='<%= user.name %>'>
+                <button type='submit'>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-check" viewBox="0 0 16 16">
+                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
           </form>
           <form class='my-4' action='/edit-email' method='POST'>
-            <label class='d-block'>Schimbare email</label>
-            <input type="email" name='email' value='<%= user.email %>'>
-            <button type='submit'>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-              </svg>
-            </button>
+            <div>
+              <label class='d-block'>Schimbare email</label>
+              <div class='d-flex flex-row align-items-center justify-content-center'>
+                <input type="email" name='email' value='<%= user.email %>'>
+                <button type='submit'>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-check" viewBox="0 0 16 16">
+                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
           </form>
           <form class='my-4' action='/edit-password' method='POST'>
-            <label class='d-block'>Schimbare parolă</label>
-            <input type="password" name='password' value='<%= user.password %>'>
-            <button type='submit'>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-              </svg>
-            </button>
-          </form>
-        </div>
-        <div class='my-5'>
-          <h3>Adaugă o adresă</h3>
-          <form action='/add-user-address' method='post'>
             <div>
-              <label for="country">Țara</label>
-              <select name="country" id="country">
+              <label class='d-block'>Schimbare parolă</label>
+              <div class='d-flex flex-row align-items-center justify-content-center'>
+                  <input type="password" name='password' value='<%= user.password %>'>
+                  <button type='submit'>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-check" viewBox="0 0 16 16">
+                      <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                    </svg>
+                  </button>
+              </div>
+            </div>
+          </form>
+        </section>
+        
+        <section id='addresses' class='mt-5 d-flex flex-column align-items-center justify-content-center text-center'>
+          <div class='d-flex flex-row align-items-center mb-3'>
+            <h3>Adresele tale</h3>
+          </div>
+          <div class='w-100'>
+            <% if (addresses.length > 0) { %>
+              <ul>
+                <div class='address-container'>
+                  <% addresses.forEach(address => { %>
+                    <div class='address-card d-flex flex-column align-items-start'>
+                      <div class='w-100 h-100'>
+                        <% if (address.default) { %>
+                          <li><h4>Adresa principală</h4></li>
+                        <% } %>
+                        <li><%= address.country %></li>
+                        <li><%= address.state %></li>
+                        <li><%= address.city %></li>
+                        <li><%= address.address %></li>
+                        <li><%= address.zipCode %></li>
+                        <li><%= address.fullName %></li>
+                        <li><%= address.phoneNumber %></li>
+                      </div>
+                      <div class='buttons d-flex flex-column align-items-center'>
+                        <form class='mt-3' action="/set-default-user-address" method="POST">
+                          <button type='submit' class='button'>Setează principală</button>
+                          <input type="hidden" name="userAddressId" value='<%= address.id %>'>
+                        </form>
+                        <form class='mt-3' action="/delete-user-address" method="POST">
+                          <button class='button-secondary'>Șterge</button>
+                          <input type="hidden" name="userAddressId" value='<%= address.id %>'>
+                        </form>
+                      </div>
+                    </div>
+                  <% }) %>
+                </div>
+              </ul>
+            <% } else { %>
+              <p>Nicio adresă salvată.</p>
+            <% } %>
+          </div>
+        </section>
+
+        <section class='address-info mt-5 d-flex flex-column align-items-center justify-content-center text-center'>
+          <div class='d-flex flex-row align-items-center justify-content-center mb-3'>
+            <h3>Adaugă o adresă</h3>
+              <svg id='addressFormButton' xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-plus" viewBox="0 0 16 16">
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+              </svg>
+          </div>
+          <form action='/add-user-address' method='post' id='addressForm' style='display: none;'>
+            <div class='mb-3'>
+              <label class='d-block' for="country">Țara</label>
+              <select name="country" id="country" required>
                 <option value="RO">România</option>
               </select>
             </div>
-            <div>
-              <label for="state">Județ</label>
-              <select name="state" id="state">
+            <div class='mb-3'>
+              <label class='d-block' for="state">Județ</label>
+              <select name="state" id="state" required>
                 <% states.forEach(state => { %>
                   <option value="<%= state.auto %>"><%= state.nume %></option>
                 <% }) %>
               </select>
             </div>
-            <div>
-              <label for="city">Oraș</label>
-              <select name="city" id="city">
-
+            <div class='mb-3'>
+              <label class='d-block' for="city">Localitate</label>
+              <select name="city" id="city" required>
+                <option value="">Selectează județul</option>
               </select>
             </div>
+            <div class='mb-3'>
+              <label class='d-block' for="address">Adresa</label>
+              <input type="text" name='address' id='address' required>
+            </div>
+            <div class='mb-3'>
+              <label class='d-block' for="zipCode">Cod poștal</label>
+              <input type="number" name='zipCode' id='zipCode' required>
+            </div>
+            <div class='mb-3'>
+              <label class='d-block' for="fullName">Nume complet</label>
+              <input type="text" name='fullName' id='fullName' required>
+            </div>
+            <div class='mb-3'>
+              <label class='d-block' for="phoneNumber">Număr de telefon</label>
+              <input type="text" name='phoneNumber' id='phoneNumber' required>
+            </div>
+            <button type='submit' class='button'>Adaugă</button>
           </form>
-        </div>
+        </section>
+
         <% if (user.admin) { %>
         <div class='my-5'>
           <h2>Panoul administratorului</h2>
           <a href="/admin/add-product">Adaugă un nou produs</a>
         </div>
         <% } %>
+
       <% } else { %>
         <h1>Nu sunteți autentificat!</h1>
       <% } %>  
+
     </div>
   </main>
-  <script src="/js/user-panel.js" type='module'></script>
+  <script src="/js/user-panel.js"></script>
   <%- include('../includes/end.ejs') %>

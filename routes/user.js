@@ -20,4 +20,10 @@ router.post('/edit-email', userController.postEditEmail);
 
 router.post('/edit-password', userController.postEditPassword);
 
+router.post('/add-user-address', userController.postUserAddress);
+
+router.post('/delete-user-address', userController.postDeleteUserAddress);
+
+router.post('/set-default-user-address', userController.postSetDefaultUserAddress);
+
 module.exports = router;

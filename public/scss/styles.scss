@@ -31,6 +31,15 @@ main {
   padding: 5px 10px;
   cursor: pointer;
   border: none;
+
+  &-secondary {
+    color: $dark-blue;
+    font-size: $main-font-size;
+    background-color: $blue-gray;
+    padding: 5px 10px;
+    cursor: pointer;
+    border: none;
+  }
 }
 
 .custom-form { 

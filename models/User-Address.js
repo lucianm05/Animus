@@ -20,6 +20,11 @@ const UserAddress = sequelize.define('userAddress', {
     allowNull: true,
   },
 
+  city: {
+    type: Sequelize.TEXT,
+    allowNull: true
+  },
+
   address: {
     type: Sequelize.TEXT,
     allowNull: true,
@@ -36,8 +41,13 @@ const UserAddress = sequelize.define('userAddress', {
   },
 
   phoneNumber: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.TEXT,
     allowNull: true,
+  },
+
+  default: {
+    type: Sequelize.BOOLEAN,
+    allowNull: true
   }
 });
 

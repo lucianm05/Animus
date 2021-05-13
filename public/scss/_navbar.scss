@@ -1,124 +1,122 @@
 header {
-  margin-bottom: 200px;
-}
+  margin-bottom: 175px;
 
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  min-height: 140px;
-  max-height: 170px;
-  text-align: center;
-  background-color: $yellow;
-
-  li {
-    display: inline-block;
-  }
-
-  a {
-    text-decoration: none;
-    color: $dark-blue;
-  }
-
-  &__top {
-    width: 75%;
-    margin: 0 auto;
-    padding: 10px 0;
-
-    input {
-      border: none;
-      border-bottom: 2px solid $dark-blue;
-      width: 250px;
-      height: 35px;
-      padding: 10px;
-      font-size: $main-font-size;
-      background-color: $pewter;
-    }
-  
-    input:active,
-    input:focus,
-    button:active,
-    button:focus {
-      outline: none;
-    }
-  
-    button {
-      border: none;
-      border-bottom: 2px solid $dark-blue;
-      height: 35px;
-      padding: 10px;
-      background-color: $pewter;
-      cursor: pointer;
-      font-size: $main-font-size;
-  
-      svg {
-        padding-bottom: 5px;
-      }
-    }
-
-    p {
-      color: $dark-blue;
-      font-size: $secondary-font-size;
-    }
-  }
-
-  &__bottom {
-    width: 70%;
-    margin: 0 auto;
-    padding: 10px 0;
-    padding-bottom: 25px;
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 140px;
+    max-height: 170px;
+    text-align: center;
+    background-color: $yellow;
 
     li {
-      border-right: 1px solid $dark-blue;
-      border-left: 1px solid $dark-blue;
-
-      &:nth-of-type(1) {
-        border-left: 2px solid $dark-blue;
-      }
-
-      &:nth-last-of-type(1) {
-        border-right: 2px solid $dark-blue;
-      }
-
-      &:hover {
-        background-color: darken($yellow, 5);
-      }
+      display: inline-block;
     }
 
     a {
-      display: inline-block;
+      text-decoration: none;
       color: $dark-blue;
-      font-size: $main-font-size;
+    }
+
+    &__top {
+      width: 75%;
+      margin: 0 auto;
+      padding: 10px 0;
+
+      input {
+        border: none;
+        border-bottom: 2px solid $dark-blue;
+        width: 250px;
+        height: 35px;
+        padding: 10px;
+        font-size: $main-font-size;
+        background-color: $pewter;
+      }
+
+      input:active,
+      input:focus,
+      button:active,
+      button:focus {
+        outline: none;
+      }
+
+      button {
+        border: none;
+        border-bottom: 2px solid $dark-blue;
+        height: 35px;
+        padding: 10px;
+        background-color: $pewter;
+        cursor: pointer;
+        font-size: $main-font-size;
+
+        svg {
+          padding-bottom: 5px;
+        }
+      }
+
+      p {
+        color: $dark-blue;
+        font-size: $secondary-font-size;
+      }
+    }
+
+    &__bottom {
+      width: 70%;
+      margin: 0 auto;
+      padding: 10px 0;
+      padding-bottom: 25px;
+
+      li {
+        border-right: 1px solid $dark-blue;
+        border-left: 1px solid $dark-blue;
+
+        &:nth-of-type(1) {
+          border-left: 2px solid $dark-blue;
+        }
+
+        &:nth-last-of-type(1) {
+          border-right: 2px solid $dark-blue;
+        }
+
+        &:hover {
+          background-color: darken($yellow, 5);
+        }
+      }
+
+      a {
+        display: inline-block;
+        color: $dark-blue;
+        font-size: $main-font-size;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .cart-items-count {
+      position: absolute;
       width: 100%;
       height: 100%;
+
+      p {
+        position: absolute;
+        left: 32%;
+        bottom: -50%;
+        background-color: $dark-blue;
+        color: $yellow;
+        padding: 0;
+        margin: 0;
+        width: 18px;
+        height: 18px;
+        font-size: 0.8rem;
+      }
     }
   }
-
-  .cart-items-count {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    
-    p {
-      position: absolute;
-      left: 32%;
-      bottom: -50%;
-      background-color: $dark-blue;
-      color: $yellow;
-      padding: 0;
-      margin: 0;
-      width: 18px;
-      height: 18px;
-      font-size: 0.8rem;
-    }
-  }
-
 }
 
 @media screen and (max-width: 1200px) {
   .navbar {
-
     &__top {
       width: 85%;
     }
@@ -131,7 +129,6 @@ header {
 
 @media screen and (max-width: 992px) {
   .navbar {
-    
     &__top {
       width: 95%;
 
@@ -148,7 +145,6 @@ header {
 
 @media screen and (max-width: 768px) {
   .navbar {
-
     &__top {
       width: 100%;
     }
@@ -161,16 +157,13 @@ header {
 
 @media screen and (max-width: 568px) {
   .navbar {
-
     &__top {
-      
       input {
         width: 125px;
       }
     }
 
     &__bottom {
-
       a {
         font-size: 1.1rem;
       }

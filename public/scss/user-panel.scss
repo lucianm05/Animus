@@ -14,7 +14,7 @@
   }
 
   .edit-info {
-    width: calc(100% + 44px);
+    width: 100%;
     margin: 0 auto;
 
     button {
@@ -53,6 +53,7 @@
         color: $dark-blue;
         margin: 0 auto;
         text-align: start;
+        max-width: 550px;
   
         li {
           display: block;
@@ -68,9 +69,21 @@
       
     }
   }
+
+  .admin-panel {
+    a {
+      color: $dark-blue;
+    }
+  }
 }
 
+
+
 @media (max-width: 568px) {
+  main {
+    width: 90%;
+  }
+
   .user-panel {
     font-size: 1.1rem;
 

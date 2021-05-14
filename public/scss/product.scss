@@ -2,13 +2,13 @@
 
 .product-list {
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto;
-  place-items: center;
+  margin: 0 auto;
+  text-align: center;
 
   li {
     display: inline-block;
+    width: 15rem;
+    margin: 20px 10px;
   }
 
   .product-card {
@@ -47,3 +47,30 @@
   
 }
 
+@media (max-width: 992px) {
+  main {
+    width: 80%;
+  }
+
+  .product-list {
+
+    li {
+      width: 10rem;
+    }
+
+    .product-card {
+      width: 10rem;
+
+      img {
+        width: 10rem;
+      }
+    }
+  }
+
+}
+
+@media (max-width: 568px) {
+  main {
+    width: 90%;
+  }
+}

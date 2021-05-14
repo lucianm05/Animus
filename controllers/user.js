@@ -158,7 +158,7 @@ exports.postUserAddress = (req, res, next) => {
 
   User.findByPk(user.id)
     .then((user) => {
-      return UserAddress.create({
+      UserAddress.create({
         country: userCountry,
         state: userState,
         city: userCity,
@@ -167,9 +167,10 @@ exports.postUserAddress = (req, res, next) => {
         fullName: userFullName,
         phoneNumber: userPhoneNumber,
         userId: user.id,
-      }).then((result) => {
-        res.redirect('/user-panel');
       });
+    })
+    .then((result) => {
+      res.redirect('/user-panel');
     })
     .catch((error) => console.log(error));
 
@@ -200,7 +201,7 @@ exports.postSetDefaultUserAddress = (req, res, next) => {
       return UserAddress.update({ default: false }, { where: { userId: user.id } });
     })
     .then((user) => {
-      return UserAddress.update({ default: true }, { where: {userId: userId, id: userAddressId } });
+      return UserAddress.update({ default: true }, { where: { userId: userId, id: userAddressId } });
     })
     .then((result) => {
       res.redirect('/user-panel');

@@ -20,3 +20,60 @@
     margin: 0 auto;
   }
 }
+
+.add-review {
+
+  p {
+    font-size: $secondary-font-size;
+  }
+
+  #ratingButtonsContainer {
+    width: 235px;
+    height: 44px;
+
+    button{ 
+      z-index: 100;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      width: 44px;
+      height: 44px;
+
+      &:focus,
+      &:active {
+        outline: none;
+      }
+  
+      svg,
+      path {
+        z-index: 50;
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  main {
+    width: 80%;
+  }
+
+  .product-detail {
+
+    img {
+      width: 20rem;
+    }
+  }
+}
+
+@media (max-width: 568px) {
+  main {
+    width: 90%;
+  }
+
+  .product-detail {
+
+    img {
+      width: 16rem;
+    }
+  }
+}

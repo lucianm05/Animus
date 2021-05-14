@@ -5,17 +5,17 @@
 <body>
   <%- include('../includes/navigation.ejs') %>
   <main>
-    <div>
+    <section>
       <% if (cart.length > 0) { %>
         <ul class='cart-list'>
           <% cart.forEach(prod => { %>
             <li class='my-5'>
               <div class='cart-card'>
                 <p class='d-flex align-self-start mb-3'><%= prod.name %></p>
-                <div class='container-fluid'>
+                <div class='container-fluid d-md-block d-none'>
                   <div class='row align-items-start justify-content-start'>
                     <div class='col-6 d-flex align-items-start justify-content-center flex-column m-auto p-0'>
-                      <a href="/products/<%= prod.prodId %>"><img src="<%= prod.image %>" alt="<%= prod.name %>"></a>
+                      <a href="/product/<%= prod.prodId %>"><img src="<%= prod.image %>" alt="<%= prod.name %>"></a>
                     </div>
                     <div class='col-5 d-flex align-items-start justify-content-center flex-column m-auto p-0'>
                       <div class='d-flex flex-row align-items-center justify-content-center gap-2'>
@@ -47,6 +47,48 @@
                     </div>
                   </div>
                 </div>
+
+                <div class='d-block d-md-none'>
+                  <div class='d-flex flex-column align-items-center justify-content-center'>
+                    <div>
+                      <a href="/product/<%= prod.prodId %>"><img src="<%= prod.image %>" alt="<%= prod.name %>"></a>
+                    </div>
+                    <div class='d-flex flex-column gap-2'>
+                      <div class='d-flex flex-column'>
+                        <div class='d-flex flex-row align-items-center justify-content-center gap-2'>
+                          <p><%= prod.quantity %> buc</p>
+                            <form action='/increase-quantity' method='POST' style='height: 36px;'>
+                              <button type='submit' style='height: 36px;'>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="#333652" class="bi bi-plus-square" viewBox="0 0 16 16">
+                                  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                </svg>
+                                <input type="hidden" name="prodId" value='<%= prod.prodId %>'>
+                              </button>
+                            </form>
+                        </div>
+                        <p><%= prod.price %> RON/buc</p>
+                      </div>
+                      <hr>
+                      <div>
+                        <p>TOTAL <%= prod.totalPrice %> RON</p>
+                      </div>
+                      <hr>
+                      <div class='d-flex align-items-center justify-content-center'>
+                        <form action='/remove-from-cart' method='POST'>
+                          <button type='submit'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-x-square" viewBox="0 0 16 16">
+                              <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                          </button>
+                          <input type="hidden" name="prodId" value='<%= prod.prodId %>'>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
               </div>
             </li>
           <% }) %>
@@ -55,7 +97,7 @@
       <% } else { %>
         <h1>Coșul este gol.</h1>
       <% } %>
-    </div>
+    </section>
   </main>
 
 <%- include('../includes/end.ejs') %>

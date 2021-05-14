@@ -7,50 +7,52 @@
   <main>
     <div class='user-panel'>
       <% if (user.name) { %>
-        <section class='edit-info mb-5 text-center'>
+        <section class='edit-info my-3 text-center'>
           <h1>Panoul utilizatorului</h1>
-          <form class='my-3' action='/edit-username' method='POST'>
-            <div>
-              <label class='d-block'>Schimbare nume utilizator</label>
-              <div class='d-flex flex-row align-items-center justify-content-center'>
-                <input type="text" name='name' value='<%= user.name %>'>
-                <button type='submit'>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-check" viewBox="0 0 16 16">
-                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </form>
-          <form class='my-4' action='/edit-email' method='POST'>
-            <div>
-              <label class='d-block'>Schimbare email</label>
-              <div class='d-flex flex-row align-items-center justify-content-center'>
-                <input type="email" name='email' value='<%= user.email %>'>
-                <button type='submit'>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-check" viewBox="0 0 16 16">
-                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </form>
-          <form class='my-4' action='/edit-password' method='POST'>
-            <div>
-              <label class='d-block'>Schimbare parolă</label>
-              <div class='d-flex flex-row align-items-center justify-content-center'>
-                  <input type="password" name='password' value='<%= user.password %>'>
+          <div>
+            <form class='my-3' action='/edit-username' method='POST'>
+              <div>
+                <label class='d-block'>Schimbare nume utilizator</label>
+                <div class='d-flex flex-row align-items-center justify-content-center'>
+                  <input type="text" name='name' value='<%= user.name %>'>
                   <button type='submit'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-check" viewBox="0 0 16 16">
                       <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
                     </svg>
                   </button>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+            <form class='my-4' action='/edit-email' method='POST'>
+              <div>
+                <label class='d-block'>Schimbare email</label>
+                <div class='d-flex flex-row align-items-center justify-content-center'>
+                  <input type="email" name='email' value='<%= user.email %>'>
+                  <button type='submit'>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-check" viewBox="0 0 16 16">
+                      <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </form>
+            <form class='my-4' action='/edit-password' method='POST'>
+              <div>
+                <label class='d-block'>Schimbare parolă</label>
+                <div class='d-flex flex-row align-items-center justify-content-center'>
+                    <input type="password" name='password' value='<%= user.password %>'>
+                    <button type='submit'>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-check" viewBox="0 0 16 16">
+                        <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                      </svg>
+                    </button>
+                </div>
+              </div>
+            </form>
+          </div>
         </section>
-        
-        <section id='addresses' class='mt-5 d-flex flex-column align-items-center justify-content-center text-center'>
+        <hr>
+        <section id='addresses' class='my-3 d-flex flex-column align-items-center justify-content-center text-center'>
           <div class='d-flex flex-row align-items-center mb-3'>
             <h3>Adresele tale</h3>
           </div>
@@ -91,8 +93,8 @@
             <% } %>
           </div>
         </section>
-
-        <section class='address-info mt-5 d-flex flex-column align-items-center justify-content-center text-center'>
+        <hr>
+        <section class='address-info my-3 d-flex flex-column align-items-center justify-content-center text-center'>
           <div class='d-flex flex-row align-items-center justify-content-center mb-3'>
             <h3>Adaugă o adresă</h3>
               <svg id='addressFormButton' xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-plus" viewBox="0 0 16 16">
@@ -109,6 +111,7 @@
             <div class='mb-3'>
               <label class='d-block' for="state">Județ</label>
               <select name="state" id="state" required>
+                <option value="" disabled selected>Selectează județul</option>
                 <% states.forEach(state => { %>
                   <option value="<%= state.auto %>"><%= state.nume %></option>
                 <% }) %>
@@ -117,7 +120,7 @@
             <div class='mb-3'>
               <label class='d-block' for="city">Localitate</label>
               <select name="city" id="city" required>
-                <option value="">Selectează județul</option>
+                <option value="" disabled selected>Selectează județul mai intâi</option>
               </select>
             </div>
             <div class='mb-3'>
@@ -141,10 +144,11 @@
         </section>
 
         <% if (user.admin) { %>
-        <div class='my-5'>
+        <hr>
+        <section class='admin-panel my-3 text-center'>
           <h2>Panoul administratorului</h2>
-          <a href="/admin/add-product">Adaugă un nou produs</a>
-        </div>
+          <a class='my-2' href="/admin/add-product">Adaugă un nou produs</a>
+        </section>
         <% } %>
 
       <% } else { %>

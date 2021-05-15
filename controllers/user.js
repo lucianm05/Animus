@@ -65,6 +65,14 @@ exports.getUserPanelPage = (req, res, next) => {
   const cart = userUtil.returnCart(req, res, next);
   let addresses;
 
+  if (!user.name) {
+    return res.render('notAuth.ejs', {
+      pageTitle: 'Nu sunteți autentificat',
+      user: user,
+      cart: cart,
+    });
+  }
+
   User.findByPk(user.id)
     .then((user) => {
       UserAddress.findAll({ where: { userId: user.id } })

@@ -47,7 +47,7 @@
   
 }
 
-@media (max-width: 992px) {
+@media (max-width: $lg) {
   main {
     width: 80%;
   }
@@ -59,6 +59,11 @@
     }
 
     .product-card {
+      p {
+        font-size: 1rem;
+        padding: 5px 0;
+      }
+
       width: 10rem;
 
       img {
@@ -69,8 +74,27 @@
 
 }
 
-@media (max-width: 568px) {
+@media (max-width: $sm) {
   main {
     width: 90%;
+  }
+
+  .product-list {
+
+    li {
+      width: 8rem;
+    }
+
+    .product-card {
+      width: 8rem;
+
+      img {
+        width: 8rem;
+      }
+
+      button {
+        font-size: 1.15rem;
+      }
+    }
   }
 }

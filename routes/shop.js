@@ -18,6 +18,8 @@ router.post('/increase-quantity', shopController.postIncreaseCartQuantity)
 
 router.get('/product/:prodId', shopController.getProductDetailPage);
 
+router.post('/add-review', shopController.postAddReview);
+
 router.get('/', shopController.getIndexPage);
 
 module.exports = router;

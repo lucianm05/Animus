@@ -21,11 +21,11 @@ const Review = require('./models/Review');
 
 app.use((req, res, next) => {
   User.findByPk(1)
-    .then((user) => {
-      req.user = user;
-      next();
-    })
-    .catch((error) => console.log(error));
+  .then((user) => {
+    req.user = user;
+    next();
+  })
+  .catch((error) => console.log(error));
 });
 
 app.use((req, res, next) => {
@@ -61,7 +61,7 @@ Product.belongsToMany(Cart, { through: CartItem });
 User.hasMany(Order);
 Order.belongsToMany(Product, { through: OrderItem });
 User.hasMany(UserAddress);
-User.hasMany(Review);
+Review.belongsTo(User);
 Product.hasMany(Review);
 
 sequelize

@@ -1,5 +1,5 @@
-@import 'config';
 @import 'navbar';
+@import 'config';
 @import 'footer';
 @import '../../node_modules/bootstrap/scss/bootstrap-grid.scss';
 @import '../../node_modules/bootstrap/scss/bootstrap-utilities.scss';
@@ -62,21 +62,21 @@ main {
   }
 }
 
-@media (max-width: 992px) {
+@media (max-width: $lg) {
 
   .custom-form {
     width: 70%;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $md) {
 
   .custom-form {
     width: 85%;
   }
 }
 
-@media (max-width: 568px) {
+@media (max-width: $sm) {
 
   .custom-form {
     width: 100%;

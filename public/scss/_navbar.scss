@@ -1,13 +1,15 @@
+@import 'config';
+
 header {
   margin-bottom: 175px;
 
   .navbar {
+    z-index: 100;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    min-height: 140px;
-    max-height: 170px;
+    height: 140px;
     text-align: center;
     background-color: $yellow;
 
@@ -59,6 +61,19 @@ header {
       p {
         color: $dark-blue;
         font-size: $secondary-font-size;
+      }
+
+      #mobileNavButton {
+        background-color: transparent;
+        width: 48px;
+        height: 48px;
+        border: none;
+        padding: 0;
+        transition: all 0.2s ease;
+
+        svg {
+          padding: none;
+        }
       }
     }
 
@@ -112,10 +127,44 @@ header {
         font-size: 0.8rem;
       }
     }
+
+    #navbar__mobile {
+      background-color: $yellow;
+      font-size: $main-font-size;
+      width: 50%;
+      height: 100vh;
+      text-align: start;
+      padding: 15px 15px;
+      z-index: 100;
+      transform: translateX(-100%);
+      transition: all 0.2s ease;
+
+      li {
+        display: block;
+        padding: 7px 0;
+
+        a {
+          width: 100%;
+          display: block;
+        }
+      }
+    }
+  }
+
+  #backdrop {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 50;
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
   }
 }
 
-@media screen and (max-width: 1200px) {
+@media (max-width: $xl) {
   .navbar {
     &__top {
       width: 85%;
@@ -127,45 +176,65 @@ header {
   }
 }
 
-@media screen and (max-width: 992px) {
-  .navbar {
-    &__top {
-      width: 95%;
+@media (max-width: $lg) {
+  header {
+    margin-bottom: 100px;
 
-      input {
-        width: 150px;
+    .navbar {
+      height: 80px;
+  
+      &__top {
+        width: 95%;
+  
+        input {
+          width: 150px;
+        }
+      }
+  
+      .cart-items-count {
+
+        p {
+          bottom: -10%;
+          left: 35%;
+          font-size: 1rem;
+          width: 20px;
+          height: 20px;
+        }
       }
     }
+  }
+  
+}
 
-    &__bottom {
-      width: 95%;
+@media (max-width: $md) {
+  header {
+    .navbar {
+      &__top {
+        width: 100%;
+      }
+  
     }
   }
 }
 
-@media screen and (max-width: 768px) {
-  .navbar {
-    &__top {
-      width: 100%;
-    }
-
-    &__bottom {
-      width: 100%;
-    }
-  }
-}
-
-@media screen and (max-width: 568px) {
-  .navbar {
-    &__top {
-      input {
-        width: 125px;
+@media (max-width: $sm) {
+  header {
+    .navbar {
+      &__top {
+        input {
+          width: 125px;
+        }
       }
-    }
+  
+      .cart-items-count {
 
-    &__bottom {
-      a {
-        font-size: 1.1rem;
+        p {
+          bottom: -10%;
+          left: 20%;
+          font-size: 1rem;
+          width: 20px;
+          height: 20px;
+        }
       }
     }
   }

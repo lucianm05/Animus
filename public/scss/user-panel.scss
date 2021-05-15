@@ -79,7 +79,7 @@
 
 
 
-@media (max-width: 568px) {
+@media (max-width: $sm) {
   main {
     width: 90%;
   }

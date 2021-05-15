@@ -4,6 +4,10 @@
   color: $dark-blue;
   margin-bottom: 50px;
 
+  img {
+    width: 30rem;
+  }
+
   p {
     font-size: $secondary-font-size;
   }
@@ -52,7 +56,20 @@
   }
 }
 
-@media (max-width: 1200px) {
+.reviews {
+
+  .review-card {
+    border: 1px solid $dark-blue;
+    margin: 3rem 0;
+    padding: 15px 10px;
+
+    li {
+      display: block;
+    }
+  }
+}
+
+@media (max-width: $xl) {
   main {
     width: 80%;
   }
@@ -65,7 +82,7 @@
   }
 }
 
-@media (max-width: 568px) {
+@media (max-width: $sm) {
   main {
     width: 90%;
   }

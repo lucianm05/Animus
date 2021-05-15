@@ -1,0 +1,29 @@
+<div>
+  <% if(isNaN(rating)) { %>
+    <%- include('./empty-star.ejs') %>
+    <%- include('./empty-star.ejs') %>
+    <%- include('./empty-star.ejs') %>
+    <%- include('./empty-star.ejs') %>
+    <%- include('./empty-star.ejs') %>
+
+  <% } else { %>
+
+    <% for(let i = 1; i <= 5; i++) { %>
+
+      <% if (i <= rating) { %>
+        <%- include('./full-star.ejs') %>
+
+      <% } else if ( ( i - rating) <= 0.5 ) { %>
+
+        <% if (( (i + 0.5) <= rating < (i + 1) )) { %>
+          <%- include('./half-star.ejs') %>
+        <% } %>
+
+      <% } else { %>
+        <%- include('./empty-star.ejs') %>
+      <% } %>
+
+    <% } %>
+    
+  <% } %>
+</div>

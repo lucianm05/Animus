@@ -23,7 +23,7 @@ const getCityList = () => {
             }
           }
 
-          const uniqueCities = [...new Set(cities.sort())];
+          const uniqueCities = cities.sort().filter((el, index) => cities.indexOf(el) === index);
 
           uniqueCities.forEach((city) => {
             if (city) {

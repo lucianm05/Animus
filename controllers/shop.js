@@ -2,6 +2,8 @@ const userUtil = require('../util/userUtil');
 const Product = require('../models/Product');
 const Cart = require('../models/Cart');
 const CartItem = require('../models/Cart-Item');
+const Review = require('../models/Review');
+const User = require('../models/User');
 const { Op } = require('sequelize');
 
 exports.getIndexPage = (req, res, next) => {
@@ -223,15 +225,57 @@ exports.getProductDetailPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
   const cart = userUtil.returnCart(req, res, next);
   const productId = req.params.prodId;
+  const reviews = [];
+  let prod;
+  let rating = 0;
 
   Product.findByPk(productId)
     .then((product) => {
+      prod = product;
+      return Review.findAll({ where: { productId: product.id }, include: User });
+    })
+    .then((result) => {
+      result.forEach((review) => {
+        rating += review.dataValues.rating;
+        reviews.push({
+          ...review.dataValues,
+          username: review.user.dataValues.name,
+          date: review.dataValues.createdAt.toString().split(' ').slice(1, 4).join(' '),
+        });
+      });
+      return reviews;
+    })
+    .then((result) => {
       res.render('shop/product-detail.ejs', {
         pageTitle: 'Animus',
         user: user,
         cart: cart,
-        product: product,
+        product: prod,
+        reviews: reviews,
+        rating: (rating / reviews.length).toFixed(2),
       });
+    })
+    .catch((error) => console.log(error));
+};
+
+exports.postAddReview = (req, res, next) => {
+  const user = userUtil.returnUser(req, res, next);
+  const url = req.body.url;
+  const prodId = req.body.prodId;
+  const prodReview = req.body.prodReview;
+  const prodRating = req.body.rating;
+
+  User.findByPk(user.id)
+    .then((user) => {
+      return Review.create({
+        comment: prodReview,
+        rating: prodRating,
+        userId: user.id,
+        productId: prodId,
+      });
+    })
+    .then((result) => {
+      res.redirect(url);
     })
     .catch((error) => console.log(error));
 };

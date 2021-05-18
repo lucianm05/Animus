@@ -16,7 +16,7 @@
                     <img class='product-image' src='<%= prod.image %>' alt='<%= prod.name %>'>
                   </a>
                   <p><%= prod.price %> RON</p>
-                  <div class='d-flex align-items-center justify-content-center'>
+                  <div class='d-flex flex-column align-items-center justify-content-center'>
                     <form class='w-100' action='/add-to-cart' method='POST'>
                       <button type='submit' class='button'>Adaugă în coș</button>
                       <input type="hidden" name='prodId' id='prodId' value='<%= prod.id %>'>

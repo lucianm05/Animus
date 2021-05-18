@@ -1,0 +1,59 @@
+@import 'config';
+
+.order {
+  background-color: white;
+  padding: 15px 20px;
+  border: 1px solid $blue-gray;
+
+  li {
+    display: block;
+  }
+
+  h3 {
+    font-size: $main-font-size;
+  }
+
+  p {
+    font-size: $secondary-font-size;
+  }
+
+  .products {
+
+    li {
+      padding: 5px 10px;
+    }
+  }
+
+  .cancel-order {
+    button {
+      padding: 5px 10px;
+      background-color: $pewter;
+      border: 1px solid $dark-blue;
+      font-size: $secondary-font-size;
+      cursor: pointer;
+    }
+  }
+
+  .admin-buttons {
+    button {
+      width: 220px;
+      height: 37px;
+      background-color: $pewter;
+      border: 1px solid $dark-blue;
+      font-size: $secondary-font-size;
+      cursor: pointer;
+    }
+  }
+}
+
+@media (max-width: $lg) {
+  main {
+    width: 85%;
+  }
+}
+
+@media (max-width: $sm) {
+  main {
+    width: 95%;
+  }
+}

@@ -13,6 +13,40 @@
   }
 }
 
+#deleteDialog {
+  background-color: $yellow;
+  width: 35%;
+  height: 35%;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  margin-top: -10%;
+  margin-left: -17.5%;
+  padding: 5px 10px;
+  transform: translateY(-300%);
+  transition: all 0.2s ease;
+  z-index: 100;
+
+  #closeButton {
+    position: fixed;
+    right: 5%;
+    top: 5%;
+    cursor: pointer;
+  }
+}
+
+#backdropProductDetail {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
 .custom-break {
   background-color: $dark-blue;
   height: 55px;
@@ -54,6 +88,10 @@
       }
     }
   }
+
+  textarea {
+    padding: 5px 10px;
+  }
 }
 
 .reviews {
@@ -82,6 +120,14 @@
   }
 }
 
+@media (max-width: $lg) {
+  #deleteDialog {
+    width: 50%;
+    margin-left: -25%;
+    margin-top: -25%;
+  }
+}
+
 @media (max-width: $sm) {
   main {
     width: 90%;
@@ -92,5 +138,12 @@
     img {
       width: 16rem;
     }
+  }
+
+  #deleteDialog {
+    width: 80%;
+    height: 40%;
+    margin-top: -40%;
+    margin-left: -40%;
   }
 }

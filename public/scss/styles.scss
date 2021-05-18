@@ -9,6 +9,7 @@
   margin: 0;
   padding: 0;
   font-family: $font-stack;
+  color: $dark-blue;
 }
 
 body {
@@ -45,6 +46,7 @@ main {
 .custom-form { 
   width: 50%;
   margin: 0 auto;
+  color: $dark-blue;
 
   label {
     font-size: $main-font-size;
@@ -59,6 +61,51 @@ main {
     border: 1px solid $dark-blue;
     padding: 5px;
     font-size: $secondary-font-size;
+  }
+}
+
+.address-info {
+
+  #addressFormButton {
+    cursor: pointer;
+  }
+
+  #addressForm {
+    display: none;
+  }
+}
+
+#addresses {
+  width: 100%;
+
+  .address-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    grid-template-rows: auto;
+    grid-gap: 20px;
+
+    .address-card {
+      width: 100%;
+      border: 2px solid $blue-gray;
+      padding: 5px 10px;
+      color: $dark-blue;
+      margin: 0 auto;
+      text-align: start;
+      max-width: 550px;
+
+      li {
+        display: block;
+        width: 100%;
+        border-bottom: 1px solid $blue-gray;
+      }
+    }
+  }
+
+  .buttons {
+    width: 100%;
+    height: 110px;
+    
   }
 }
 

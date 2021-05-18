@@ -2,8 +2,14 @@ const ratingButtonsContainer = document.getElementById('ratingButtonsContainer')
 const ratingText = document.getElementById('ratingText');
 const ratingInput = document.getElementById('rating');
 const ratingButtons = [];
-
 let clicked = false;
+
+const deleteButton = document.getElementById('deleteButton');
+const deleteButtonMB = document.getElementById('deleteButtonMB');
+const deleteDialog = document.getElementById('deleteDialog');
+const backdropProductDetail = document.getElementById('backdropProductDetail');
+const closeButton = document.getElementById('closeButton');
+let showDelDialog = false;
 
 [...ratingButtonsContainer.children].forEach((child) => {
   if (child.tagName === 'BUTTON') {
@@ -183,6 +189,25 @@ const setRating = (event) => {
   }
 };
 
+const showDeleteDialog = () => {
+  if (!showDelDialog) {
+    console.log('show');
+    deleteDialog.style.transform = 'translateY(0)';
+    backdropProductDetail.style.display = 'block';
+    showDelDialog = true;
+  } else {
+    console.log('hide');
+    deleteDialog.style.transform = 'translateY(-300%)';
+    backdropProductDetail.style.display = 'none';
+    showDelDialog = false;
+  }
+};
+
 ratingButtonsContainer.addEventListener('mouseover', setHover);
 ratingButtonsContainer.addEventListener('click', setRating);
 ratingButtonsContainer.addEventListener('mouseout', resetStars);
+
+deleteButton.addEventListener('click', showDeleteDialog);
+deleteButtonMB.addEventListener('click', showDeleteDialog);
+backdropProductDetail.addEventListener('click', showDeleteDialog);
+closeButton.addEventListener('click', showDeleteDialog);

@@ -20,6 +20,10 @@ router.get('/product/:prodId', shopController.getProductDetailPage);
 
 router.post('/add-review', shopController.postAddReview);
 
+router.get('/send-order/:userAddressId', shopController.getOrderPage);
+
+router.post('/finish-order', shopController.postFinishOrder);
+
 router.get('/', shopController.getIndexPage);
 
 module.exports = router;

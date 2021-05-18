@@ -1,0 +1,109 @@
+<%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/orders.css">
+</head>
+
+<body>
+  <%- include('../includes/navigation.ejs') %>
+  <main>
+
+    <% if (user.admin) { %>
+      <div class='mb-5'>
+        <div class='d-flex flex-column flex-lg-row'>
+          <div class='d-none d-lg-flex flex-row w-100'>
+            <div class='w-100 text-center'>
+              <a href="/admin/orders">Toate comenzile</a>
+            </div>
+            <div class='w-100 text-center'>
+              <a href="/admin/orders/sent">Comenzile trimise</a>
+            </div>
+            <div class='w-100 text-center'>
+              <a href="/admin/orders/processing">Comenzile în curs de procesare</a>
+            </div>
+            <div class='w-100 text-center'>
+              <a href="/admin/orders/finished">Comenzile finalizate</a>
+            </div>
+            <div class='w-100 text-center'>
+              <a href="/admin/orders/cancelled">Comenzile anulate</a>
+            </div>
+          </div>
+          <div class='d-flex d-lg-none flex-row mb-3'>
+            <div class='w-100 text-center'>
+              <a href="/admin/orders">Toate comenzile</a>
+            </div>
+            <div class='w-100 text-center'>
+              <a href="/admin/orders/sent">Comenzile trimise</a>
+            </div>
+            <div class='w-100 text-center'>
+              <a href="/admin/orders/processing">Comenzile în curs de procesare</a>
+            </div>
+          </div>
+          <div class='d-flex d-lg-none flex-row mt-3'>
+            <div class='w-100 text-center'>
+              <a href="/admin/orders/finished">Comenzile finalizate</a>
+            </div>
+            <div class='w-100 text-center'>
+              <a href="/admin/orders/cancelled">Comenzile anulate</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class='orders d-flex align-items-center justify-content-center'>
+        <div class='orders-container'>
+          <% if(orders.length > 0) { %>
+              <ul class='w-100'>
+                <% orders.forEach(order => { %>
+                  <li class='mb-4 mx-4 d-block d-lg-inline-block'>
+                    <div class='order-card w-100 m-auto'>
+                        <h3>Comanda #<%= order.id %></h3>
+                        <p>Data comenzii: <strong><%= order.createdAt %></strong> </p>
+                        <p>Status:
+                          <% if (order.sent) { %>
+                            <strong class='text-primary'>Comandă trimisă</strong> 
+                          <% } else if (order.processing) { %>
+                            <strong class='text-info'>Comandă în curs de procesare</strong>
+                          <% } else if (order.finished) { %>
+                            <strong class='text-success'>Comandă finalizată</strong>
+                          <% } else if (order.cancelled) { %>
+                            <strong class='text-danger'>Comandă anulată</strong>
+                          <% } %>
+                        </p>
+                        <p>Metoda de livrare: 
+                          <% if (order.deliveryMethod === 'curier') { %>
+                            Curier
+                          <% } else if (order.deliveryMethod === 'posta') { %>
+                            Poștă
+                          <% } %>
+                        </p>
+                        <p>Metoda de plată: 
+                          <% if (order.payMethod === 'ramburs') { %>
+                            Ramburs
+                          <% } else if (order.payMethod === 'card') { %>
+                            Card
+                          <% } else if (order.payMethod === 'transferBancar') { %>
+                            Transfer bancar
+                          <% } %>
+                        </p>
+                        <h3>
+                          <a href="/admin/order/<%= order.id %>">Vezi detalii</a>
+                        </h3>
+                    </div>
+                  </li>
+                <% }) %>
+              </ul>
+          <% } else { %>
+            <div class='w-100 text-center'>
+              <h1>Nu există nicio comandă.</h1>
+            </div>
+          <% } %>
+        </div>
+      </section>
+    <% } else { %>
+      <div class='w-100 text-center'>
+        <h1>Nu aveți acces.</h1>
+      </div>
+    <% } %>
+
+  </main>
+
+<%- include('../includes/end.ejs') %>

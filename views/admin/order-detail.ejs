@@ -1,0 +1,138 @@
+<%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/order-detail.css">
+</head>
+
+<body>
+  <%- include('../includes/navigation.ejs') %>
+  <main>
+
+    <section>
+      <% if (orderItems.length > 0) { %>
+        <div class='order'>
+          <div class='order-details mb-3'>
+            <h1>Comanda #<%= order.id %></h1>
+            <p>Data: <%= order.createdAt %></p>
+            <p>Status:
+              <% if (order.sent) { %>
+                <strong class='text-primary'>Comandă trimisă</strong> 
+              <% } else if (order.processing) { %>
+                <strong class='text-info'>Comandă în curs de procesare</strong>
+              <% } else if (order.finished) { %>
+                <strong class='text-success'>Comandă finalizată</strong>
+                <% } else if (order.cancelled) { %>
+                  <strong class='text-danger'>Comandă anulată</strong>
+                <% } %>
+            </p>
+            <p>Metoda de livrare: 
+              <% if (order.deliveryMethod === 'curier') { %>
+                Curier
+              <% } else if (order.deliveryMethod === 'posta') { %>
+                Poștă
+              <% } %>
+            </p>
+            <p>Metoda de plată: 
+              <% if (order.payMethod === 'ramburs') { %>
+                Ramburs
+              <% } else if (order.payMethod === 'card') { %>
+                Card
+              <% } else if (order.payMethod === 'transferBancar') { %>
+                Transfer bancar
+              <% } %>
+            </p>
+          </div>
+          <hr>
+          <ul class='products'>
+            <% orderItems.forEach(prod => { %>
+              <li class='my-3'>
+                <div class='d-none d-lg-flex flex-row'>
+                  <div class='w-100'>
+                    <p><a href="/product/<%= prod.productId %>"><%= prod.name %></a></p>
+                  </div>
+                  <div class='w-50 text-end'>
+                    <p><%= prod.quantity %> buc.</p>
+                  </div>
+                  <div class='w-100 text-center'>
+                    <p><%= prod.price %> RON/buc</p>
+                  </div>
+                  <div class='w-100 text-end'>
+                    <p>Total <%= prod.totalPrice %> RON</p>
+                  </div>
+                </div>
+
+                <div class='d-flex d-lg-none flex-column gap-4'>
+                  <div class='w-100'>
+                    <p><a href="/product/<%= prod.productId %>"><%= prod.name %></a></p>
+                  </div>
+                  <div class='d-flex'>
+                    <div class='w-100 text-start'>
+                      <p><%= prod.quantity %> buc.</p>
+                    </div>
+                    <div class='w-100 text-center'>
+                      <p><%= prod.price %> RON/buc</p>
+                    </div>
+                    <div class='w-100 text-end'>
+                      <p>Total <%= prod.totalPrice %> RON</p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <hr>
+            <% }) %>
+          </ul>
+          <div class='contact-details mt-3'>
+            <h3>Date de contact</h3>
+            <ul>
+              <li>Nume: <%= userAddress.fullName %></li>
+              <li>Adresa: <%= userAddress.address %></li>
+              <li>Telefon de contact: <%= userAddress.phoneNumber %></li>
+            </ul>
+          </div>
+          <h3 class='mt-3'>TOTAL Comandă: <%= totalCartPrice %> RON</h3>
+
+          <% if (user.admin) { %>
+            <div class='admin-buttons d-flex flex-column mt-5 gap-4'>
+              <div class='d-flex flex-column flex-lg-row gap-4 gap-lg-0'>
+                <div class='w-100 text-center'>
+                  <form action="/admin/set-order-sent" method="POST">
+                    <button type='submit'><strong class='text-primary'>Marchează trimisă</strong></button>
+                    <input type="hidden" name="orderId" value='<%= order.id %>'>
+                    <input type="hidden" name="url" value='/admin/order/<%= order.id %>'>
+                  </form>
+                </div>
+                <div class='w-100 text-center'>
+                  <form action="/admin/set-order-processing" method="POST">
+                    <button type='submit'><strong class='text-info'>Marchează în procesare</strong></button>
+                    <input type="hidden" name="orderId" value='<%= order.id %>'>
+                    <input type="hidden" name="url" value='/admin/order/<%= order.id %>'>
+                  </form>
+                </div>
+              </div>
+              <div class='d-flex flex-column flex-lg-row gap-4 gap-lg-0'>
+                <div class='w-100 text-center'>
+                  <form action="/admin/set-order-finished" method="POST">
+                    <button type='submit'><strong class='text-success'>Marchează finalizată</strong></button>
+                    <input type="hidden" name="orderId" value='<%= order.id %>'>
+                    <input type="hidden" name="url" value='/admin/order/<%= order.id %>'>
+                  </form>
+                </div>
+                <div class='w-100 text-center'>
+                  <form action="/admin/set-order-cancelled" method="POST">
+                    <button type='submit'><strong class='text-danger'>Marchează anulată</strong></button>
+                    <input type="hidden" name="orderId" value='<%= order.id %>'>
+                    <input type="hidden" name="url" value='/admin/order/<%= order.id %>'>
+                  </form>
+                </div>
+              </div>
+            </div>
+          <% } %>
+
+        </div>
+
+      <% } else { %>
+        <h1>Comanda nu a fost găsită.</h1>
+      <% } %>
+    </section>
+
+  </main>
+
+<%- include('../includes/end.ejs') %>

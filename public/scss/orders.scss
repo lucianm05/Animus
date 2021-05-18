@@ -1,0 +1,34 @@
+@import 'config';
+
+.orders {
+  
+  .order-card {
+    background-color: white;
+    border: 1px solid $blue-gray;
+    padding: 5px 10px;
+
+    h3 {
+      font-size: $main-font-size;
+    }
+
+    p {
+      font-size: $secondary-font-size;
+    }
+  }
+
+  li {
+    display: block;
+  }
+}
+
+@media (max-width: $lg) {
+  main {
+    width: 85%;
+  }
+}
+
+@media (max-width: $sm) {
+  main {
+    width: 95%;
+  }
+}

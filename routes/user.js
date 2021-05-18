@@ -26,4 +26,10 @@ router.post('/delete-user-address', userController.postDeleteUserAddress);
 
 router.post('/set-default-user-address', userController.postSetDefaultUserAddress);
 
+router.get('/user-orders', userController.getUserOrdersPage);
+
+router.get('/user-orders/:orderId', userController.getOrderDetailsPage);
+
+router.post('/cancel-order', userController.postCancelUserOrder);
+
 module.exports = router;

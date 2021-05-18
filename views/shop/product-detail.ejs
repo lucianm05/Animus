@@ -41,6 +41,11 @@
                       <input type="hidden" name='url' value='/product/<%= product.id %>'>
                     </form>
                   </div>
+                  <% if (user.admin) { %>
+                    <div class='col-12 mt-5'>
+                      <button type='button' id='deleteButton' class='button-secondary'>Șterge produsul</button>
+                    </div>
+                  <% } %>
                 </div>
               </div>
             </div>
@@ -81,8 +86,34 @@
                 <input type="hidden" name='url' value='/product/<%= product.id %>'>
               </form>
             </div>
+            <% if (user.admin) { %>
+              <div class='mt-5'>
+                <button type='button' id='deleteButtonMB' class='button-secondary'>Șterge produsul</button>
+              </div>
+            <% } %>
           </div>
         </div>
+
+        <% if(user.admin) { %>
+          <div id='backdropProductDetail'></div>
+          <div id='deleteDialog' class='d-flex flex-column justify-content-center align-items-center gap-5 text-center'>
+            <div id='closeButton'>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Sigur doriți să ștergeți produsul?</h3>
+              <p><%= product.name %></p>
+            </div>
+            <div class='mt-3'>
+              <form action="/admin/delete-product" method="POST">
+                <button type='submit' class='button-secondary'>Șterge produsul</button>
+                <input type="hidden" name='prodId' value='<%= product.id %>'>
+              </form>
+            </div>
+          </div> 
+        <% } %>
       </section>
 
       <section class='custom-break d-flex align-self-center justify-content-center my-5'>
@@ -145,7 +176,7 @@
                       <p><%= review.username %></p>
                     </div>
                     <div class='text-end w-100'>
-                      <p><%= review.date %></p>
+                      <p><%= review.createdAt %></p>
                     </div>
                   </div>
                   <hr>

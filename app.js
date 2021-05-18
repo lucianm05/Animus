@@ -55,11 +55,13 @@ app.use(adminRoutes);
 app.use(shopRoutes);
 app.use(errorController.get404);
 
-Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+Product.belongsTo(User, { constraints: true });
 User.hasOne(Cart);
 Product.belongsToMany(Cart, { through: CartItem });
+User.hasMany(CartItem);
 User.hasMany(Order);
-Order.belongsToMany(Product, { through: OrderItem });
+UserAddress.hasMany(Order);
+Product.belongsToMany(Order, { through: OrderItem });
 User.hasMany(UserAddress);
 Review.belongsTo(User);
 Product.hasMany(Review);

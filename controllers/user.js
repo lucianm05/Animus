@@ -2,6 +2,9 @@ const fetch = require('node-fetch');
 const userUtil = require('../util/userUtil');
 const User = require('../models/User');
 const UserAddress = require('../models/User-Address');
+const Order = require('../models/Order');
+const OrderItem = require('../models/Order-Item');
+const Product = require('../models/Product');
 
 exports.getSignUpPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
@@ -213,6 +216,105 @@ exports.postSetDefaultUserAddress = (req, res, next) => {
     })
     .then((result) => {
       res.redirect('/user-panel');
+    })
+    .catch((error) => console.log(error));
+};
+
+exports.getUserOrdersPage = (req, res, next) => {
+  const user = userUtil.returnUser(req, res, next);
+  const cart = userUtil.returnCart(req, res, next);
+  let fetchedOrders = [];
+
+  if (!user.name) {
+    return res.render('notAuth.ejs', {
+      pageTitle: 'Nu sunteți autentificat',
+      user: user,
+      cart: cart,
+    });
+  }
+
+  User.findByPk(user.id)
+    .then((user) => {
+      return Order.findAll({ where: { userId: user.id } });
+    })
+    .then((orders) => {
+      return orders.forEach((order) => {
+        order.dataValues.createdAt = order.dataValues.createdAt.toString().split(' ').slice(1, 4).join(' ');
+        return fetchedOrders.push(order.dataValues);
+      });
+    })
+    .then((result) => {
+      res.render('user/orders.ejs', {
+        pageTitle: 'Comenzile tale',
+        user: user,
+        cart: cart,
+        orders: fetchedOrders,
+      });
+    })
+    .catch((error) => console.log(error));
+};
+
+exports.getOrderDetailsPage = (req, res, next) => {
+  const user = userUtil.returnUser(req, res, next);
+  const cart = userUtil.returnCart(req, res, next);
+  const orderId = req.params.orderId;
+  const fetchedOrderItems = [];
+  let fetchedOrder;
+  let totalCartPrice = 0;
+
+  if (!user.name) {
+    return res.render('notAuth.ejs', {
+      pageTitle: 'Nu sunteți autentificat',
+      user: user,
+      cart: cart,
+    });
+  }
+
+  User.findByPk(user.id)
+    .then((user) => {
+      return Order.findOne({ where: { id: orderId, userId: user.id } });
+    })
+    .then((order) => {
+      order.dataValues.createdAt = order.dataValues.createdAt.toString().split(' ').slice(1, 4).join(' ');
+      fetchedOrder = order;
+      return OrderItem.findAll({ where: { orderId: order.id } });
+    })
+    .then((orderItems) => {
+      return orderItems.forEach((item) => {
+        totalCartPrice += item.dataValues.totalPrice;
+        item.dataValues.price = item.dataValues.price.toFixed(2);
+        item.dataValues.totalPrice = item.dataValues.totalPrice.toFixed(2);
+        return fetchedOrderItems.push(item.dataValues);
+      });
+    })
+    .then((order) => {
+      return UserAddress.findByPk(fetchedOrder.userAddressId);
+    })
+    .then((userAddress) => {
+      res.render('user/order-detail.ejs', {
+        pageTitle: `Comanda #${orderId}`,
+        user: user,
+        cart: cart,
+        orderItems: fetchedOrderItems,
+        totalCartPrice: totalCartPrice.toFixed(2),
+        userAddress: userAddress,
+        order: fetchedOrder,
+      });
+    })
+    .catch((error) => console.log(error));
+};
+
+exports.postCancelUserOrder = (req, res, next) => {
+  const user = userUtil.returnUser(req, res, next);
+  const orderId = req.body.orderId;
+  const url = req.body.url;
+
+  Order.findByPk(orderId)
+    .then((order) => {
+      return order.update({ sent: false, processing: false, finished: false, cancelled: true });
+    })
+    .then(result => {
+      res.redirect(url);
     })
     .catch((error) => console.log(error));
 };

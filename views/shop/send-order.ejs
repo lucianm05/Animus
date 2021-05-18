@@ -1,0 +1,61 @@
+<%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/send-order.css">;
+</head>
+
+<body>
+  <%- include('../includes/navigation.ejs') %>
+  <main>
+    <div class='w-100 text-center'>
+      <h1>Rezumat comandă</h1>
+      <h2>Total de plătit: <%= totalCartPrice %> RON</h2>
+      <section id='addresses' class='my-3 flex-column align-items-center justify-content-center text-center'>
+        <div class='w-100'>
+            <ul>
+              <div class='address-container'>
+                  <div class='address-card d-flex flex-column align-items-start'>
+                    <div class='w-100 h-100'>
+                      <li><%= address.country %></li>
+                      <li><%= address.state %></li>
+                      <li><%= address.city %></li>
+                      <li><%= address.address %></li>
+                      <li><%= address.zipCode %></li>
+                      <li><%= address.fullName %></li>
+                      <li><%= address.phoneNumber %></li>
+                    </div>
+                  </div>
+              </div>
+            </ul>
+        </div>
+      </section>
+    </div>
+    
+
+    <section>
+      <div class='w-100 text-center'>
+        <form class='custom-form' action="/finish-order" method='POST'>
+          <div>
+            <div class='my-4'>
+              <h3>Selectează metoda de livrare</h3>
+              <select name="deliveryMethod" id="deliveryMethod">
+                <option value="curier">Curier</option>
+                <option value="posta">Poștă</option>
+              </select>
+            </div>
+            <div class='my-4'>
+              <h3>Selectează metoda de plată</h3>
+              <select name="payMethod" id="payMethod">
+                <option value="ramburs">Ramburs</option>
+                <option value="card">Card</option>
+                <option value="transferBancar">Transfer Bancar</option>
+              </select>
+            </div>
+          </div>
+          <button type='submit' class="button">Finalizează comanda</button>
+          <input type="hidden" name="userAddressId" value='<%= address.id %>'>
+        </form>
+        
+      </div>
+    </section>
+  </main>
+
+<%- include('../includes/end.ejs') %>

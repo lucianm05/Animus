@@ -51,7 +51,9 @@
             </form>
           </div>
         </section>
+
         <hr>
+
         <section id='addresses' class='my-3 d-flex flex-column align-items-center justify-content-center text-center'>
           <div class='d-flex flex-row align-items-center mb-3'>
             <h3>Adresele tale</h3>
@@ -93,7 +95,9 @@
             <% } %>
           </div>
         </section>
+
         <hr>
+        
         <section class='address-info my-3 d-flex flex-column align-items-center justify-content-center text-center'>
           <div class='d-flex flex-row align-items-center justify-content-center mb-3'>
             <h3>Adaugă o adresă</h3>
@@ -143,11 +147,22 @@
           </form>
         </section>
 
+        <hr>
+
+        <section class='my-3'>
+          <div class='w-100 text-center'>
+            <a href="/user-orders">
+              <h3>Vezi comenzile tale</h3>
+            </a>
+          </div>
+        </section>
+
         <% if (user.admin) { %>
         <hr>
         <section class='admin-panel my-3 text-center'>
           <h2>Panoul administratorului</h2>
-          <a class='my-2' href="/admin/add-product">Adaugă un nou produs</a>
+          <a class='my-2 d-block' href="/admin/add-product">Adaugă un nou produs</a>
+          <a class='my-2 d-block' href="/admin/orders">Vezi toate comenzile</a>
         </section>
         <% } %>
 

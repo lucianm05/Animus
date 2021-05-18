@@ -4,6 +4,9 @@ const Cart = require('../models/Cart');
 const CartItem = require('../models/Cart-Item');
 const Review = require('../models/Review');
 const User = require('../models/User');
+const UserAddress = require('../models/User-Address');
+const Order = require('../models/Order');
+const OrderItem = require('../models/Order-Item');
 const { Op } = require('sequelize');
 
 exports.getIndexPage = (req, res, next) => {
@@ -95,7 +98,7 @@ exports.getCartPage = (req, res, next) => {
           quantity: item.dataValues.quantity,
           price: item.dataValues.price.toFixed(2),
           image: item.dataValues.image,
-          totalPrice: item.dataValues.totalPrice,
+          totalPrice: item.dataValues.totalPrice.toFixed(2),
           prodId: item.dataValues.productId,
         });
 
@@ -103,11 +106,15 @@ exports.getCartPage = (req, res, next) => {
       });
     })
     .then((result) => {
+      return UserAddress.findAll({ where: { userId: user.id } });
+    })
+    .then((addresses) => {
       res.render('shop/cart.ejs', {
         pageTitle: 'Coș',
         cart: cart,
         user: user,
         totalCartPrice: totalCartPrice.toFixed(2),
+        addresses: addresses,
       });
     })
     .catch((error) => console.log(error));
@@ -139,18 +146,18 @@ exports.postAddToCart = (req, res, next) => {
   Cart.findOne({ where: { userId: user.id } })
     .then((cart) => {
       fetchedCart = cart;
-      return CartItem.findOne({ where: { productId: prodId, cartId: cart.id } });
+      return CartItem.findOne({ where: { productId: prodId, cartId: cart.id, userId: user.id } });
     })
     .then((product) => {
       if (!product) {
-        return CartItem.create({ productId: prodId, name: prodName, image: prodImage, price: prodPrice, totalPrice: prodPrice * newQuantity, cartId: fetchedCart.id, quantity: newQuantity });
+        return CartItem.create({ productId: prodId, userId: user.id, name: prodName, image: prodImage, price: prodPrice, totalPrice: prodPrice * newQuantity, cartId: fetchedCart.id, quantity: newQuantity });
       }
 
       if (product) {
         const oldQuantity = product.quantity;
         newQuantity = oldQuantity + 1;
         newPrice = prodPrice * newQuantity;
-        return CartItem.update({ quantity: newQuantity, totalPrice: newPrice.toFixed(2) }, { where: { productId: prodId, cartId: fetchedCart.id } });
+        return CartItem.update({ quantity: newQuantity, totalPrice: newPrice.toFixed(2) }, { where: { productId: prodId, userId: user.id, cartId: fetchedCart.id } });
       }
     })
     .then((result) => {
@@ -237,10 +244,10 @@ exports.getProductDetailPage = (req, res, next) => {
     .then((result) => {
       result.forEach((review) => {
         rating += review.dataValues.rating;
+        review.dataValues.createdAt = review.dataValues.createdAt.toString().split(' ').slice(1, 4).join(' ');
         reviews.push({
           ...review.dataValues,
           username: review.user.dataValues.name,
-          date: review.dataValues.createdAt.toString().split(' ').slice(1, 4).join(' '),
         });
       });
       return reviews;
@@ -276,6 +283,107 @@ exports.postAddReview = (req, res, next) => {
     })
     .then((result) => {
       res.redirect(url);
+    })
+    .catch((error) => console.log(error));
+};
+
+exports.getOrderPage = (req, res, next) => {
+  const user = userUtil.returnUser(req, res, next);
+  const cart = userUtil.returnCart(req, res, next);
+  const userAddressId = req.params.userAddressId;
+  let totalCartPrice = 0;
+
+  if (!user.name) {
+    res.render('notAuth.ejs', {
+      pageTitle: 'Nu sunteți autentificat!',
+      user: user,
+      cart: cart,
+    });
+  }
+
+  if (cart.length <= 0) {
+    res.render('404.ejs', {
+      pageTitle: 'Coșul de cumpărături este gol',
+      user: user,
+      cart: cart,
+    });
+  }
+
+  User.findByPk(user.id)
+    .then((user) => {
+      return cart.forEach((item) => {
+        totalCartPrice += item.dataValues.totalPrice;
+      });
+    })
+    .then((cart) => {
+      return UserAddress.findOne({ where: { id: userAddressId, userId: user.id } });
+    })
+    .then((address) => {
+      res.render('shop/send-order.ejs', {
+        pageTitle: 'Finalizează comanda',
+        user: user,
+        address: address,
+        totalCartPrice: totalCartPrice.toFixed(2),
+        cart: cart,
+      });
+    })
+    .catch((error) => console.log(error));
+};
+
+exports.postFinishOrder = (req, res, next) => {
+  const user = userUtil.returnUser(req, res, next);
+  const cart = userUtil.returnCart(req, res, next);
+  const userAddressId = req.body.userAddressId;
+  const deliveryMethod = req.body.deliveryMethod;
+  const payMethod = req.body.payMethod;
+
+  if (!user.name) {
+    res.render('notAuth.ejs', {
+      pageTitle: 'Nu sunteți autentificat!',
+      user: user,
+      cart: cart,
+    });
+  }
+
+  if (cart.length <= 0) {
+    res.render('404.ejs', {
+      pageTitle: 'Coșul de cumpărături este gol',
+      user: user,
+      cart: cart,
+    });
+  }
+
+  User.findByPk(user.id)
+    .then((user) => {
+      return Order.create({
+        sent: true,
+        processing: false,
+        finished: false,
+        cancelled: false,
+        deliveryMethod: deliveryMethod,
+        payMethod: payMethod,
+        userId: user.id,
+        cartId: cart[0].cartId,
+        userAddressId: userAddressId,
+      });
+    })
+    .then((order) => {
+      return cart.forEach((item) => {
+        OrderItem.create({
+          productId: item.dataValues.productId,
+          quantity: item.dataValues.quantity,
+          price: item.dataValues.price,
+          totalPrice: item.dataValues.totalPrice,
+          name: item.dataValues.name,
+          orderId: order.id,
+        });
+      });
+    })
+    .then((result) => {
+      return CartItem.destroy({ where: { cartId: cart[0].cartId, userId: user.id } })
+    })
+    .then((result) => {
+      res.redirect('/cart');
     })
     .catch((error) => console.log(error));
 };

@@ -4,64 +4,6 @@ const User = require('../models/User');
 const UserAddress = require('../models/User-Address');
 const Order = require('../models/Order');
 const OrderItem = require('../models/Order-Item');
-const Product = require('../models/Product');
-
-exports.getSignUpPage = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
-  const cart = userUtil.returnCart(req, res, next);
-
-  res.render('user/sign-up.ejs', {
-    pageTitle: 'Înregistrare',
-    user: user,
-    cart: cart,
-  });
-};
-
-exports.getSignInPage = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
-  const cart = userUtil.returnCart(req, res, next);
-
-  res.render('user/sign-in.ejs', {
-    pageTitle: 'Autentificare',
-    user: user,
-    cart: cart,
-  });
-};
-
-exports.postSignUpPage = (req, res, next) => {
-  const username = req.body.username;
-  const email = req.body.email;
-  const password = req.body.password;
-
-  User.create({
-    name: username,
-    email: email,
-    password: password,
-  })
-    .then((result) => {
-      res.redirect('/');
-    })
-    .catch((error) => console.log(error));
-};
-
-exports.postSignInPage = (req, res, next) => {
-  const email = req.body.email;
-  const password = req.body.password;
-
-  User.findOne({
-    where: {
-      email: email,
-      password: password,
-    },
-  })
-    .then((user) => {
-      req.user = user;
-    })
-    .then((result) => {
-      res.redirect('/');
-    })
-    .catch((error) => console.log(error));
-};
 
 exports.getUserPanelPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
@@ -275,17 +217,26 @@ exports.getOrderDetailsPage = (req, res, next) => {
       return Order.findOne({ where: { id: orderId, userId: user.id } });
     })
     .then((order) => {
+      if (!order) {
+        return res.render('404.ejs', {
+          pageTitle: 'Pagina nu a fost găsită',
+          user: user,
+          cart: cart,
+        });
+      }
       order.dataValues.createdAt = order.dataValues.createdAt.toString().split(' ').slice(1, 4).join(' ');
       fetchedOrder = order;
       return OrderItem.findAll({ where: { orderId: order.id } });
     })
     .then((orderItems) => {
-      return orderItems.forEach((item) => {
-        totalCartPrice += item.dataValues.totalPrice;
-        item.dataValues.price = item.dataValues.price.toFixed(2);
-        item.dataValues.totalPrice = item.dataValues.totalPrice.toFixed(2);
-        return fetchedOrderItems.push(item.dataValues);
-      });
+      if(orderItems) {
+        return orderItems.forEach((item) => {
+          totalCartPrice += item.dataValues.totalPrice;
+          item.dataValues.price = item.dataValues.price.toFixed(2);
+          item.dataValues.totalPrice = item.dataValues.totalPrice.toFixed(2);
+          return fetchedOrderItems.push(item.dataValues);
+        });
+      }
     })
     .then((order) => {
       return UserAddress.findByPk(fetchedOrder.userAddressId);
@@ -313,7 +264,7 @@ exports.postCancelUserOrder = (req, res, next) => {
     .then((order) => {
       return order.update({ sent: false, processing: false, finished: false, cancelled: true });
     })
-    .then(result => {
+    .then((result) => {
       res.redirect(url);
     })
     .catch((error) => console.log(error));

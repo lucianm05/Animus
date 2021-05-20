@@ -158,7 +158,11 @@
               </div>
               <p id='ratingText'></p>
               <input type="hidden" name="prodId" value='<%= product.id %>'>
-              <button type='submit' class='button mt-4'>Trimite</button>
+              <% if (user.name) { %>
+                <button type='submit' class='button mt-4'>Trimite</button>
+              <% } else { %>
+                <p>Trebuie să fiți autentificat pentru a adăuga o recenzie!</p>
+              <% } %>
             </div>
             <input type="hidden" name="url" value='/product/<%= product.id %>'>
           </form>

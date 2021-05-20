@@ -18,8 +18,8 @@ exports.returnUser = (req, res, next) => {
 exports.returnCart = (req, res, next) => {
   let cart = [];
 
-  if(req.user) {
-    cart = req.cart;
+  if (req.cart) {
+    return cart = req.cart;
   }
 
   return cart;

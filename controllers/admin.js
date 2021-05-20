@@ -146,7 +146,7 @@ exports.getOrderDetailsPage = (req, res, next) => {
 
   User.findByPk(user.id)
     .then((user) => {
-      return Order.findOne({ where: { id: orderId, userId: user.id } });
+      return Order.findOne({ where: { id: orderId } });
     })
     .then((order) => {
       order.dataValues.createdAt = order.dataValues.createdAt.toString().split(' ').slice(1, 4).join(' ');

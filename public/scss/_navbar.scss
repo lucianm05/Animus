@@ -23,7 +23,7 @@ header {
     }
 
     &__top {
-      width: 75%;
+      width: 85%;
       margin: 0 auto;
       padding: 10px 0;
 
@@ -75,10 +75,18 @@ header {
           padding: none;
         }
       }
+
+      .logout-button {
+        background-color: transparent;
+        padding: 0;
+        border: none;
+        font-size: $secondary-font-size;
+        cursor: pointer;
+      }
     }
 
     &__bottom {
-      width: 70%;
+      width: 75%;
       margin: 0 auto;
       padding: 10px 0;
       padding-bottom: 25px;
@@ -147,6 +155,14 @@ header {
           width: 100%;
           display: block;
         }
+      }
+
+      .logout-button {
+        background-color: transparent;
+        padding: 0;
+        border: none;
+        font-size: $main-font-size;
+        cursor: pointer;
       }
     }
   }

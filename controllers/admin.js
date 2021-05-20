@@ -18,27 +18,15 @@ exports.getAddProductPage = (req, res, next) => {
   }
 
   if (!loggedIn) {
-    if (!loggedIn) {
-      return res.render('notAuth.ejs', {
-        pageTitle: 'Nu sunteți autentificat!',
-        user: user,
-        cart: cart,
-      });
-    }
-  }
-
-  // Verificăm dacă utilizatorul are acces la pagina destinată adminilor
-  if (user.admin) {
-    return res.render('admin/add-product.ejs', {
-      pageTitle: 'Adăugați un produs',
+    return res.render('notAuth.ejs', {
+      pageTitle: 'Nu sunteți autentificat!',
       user: user,
       cart: cart,
     });
   }
 
-  // Dacă nu este admin, se afișează o pagină de eroare
-  res.status(404).render('404.ejs', {
-    pageTitle: 'Not Found',
+  res.render('admin/add-product.ejs', {
+    pageTitle: 'Adăugați un produs',
     user: user,
     cart: cart,
   });
@@ -73,15 +61,11 @@ exports.postDeleteProduct = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
   const prodId = req.body.prodId;
 
-  if (!user.admin) {
-    return;
-  }
-
   Product.destroy({ where: { id: prodId } })
     .then((result) => {
       return CartItem.destroy({ where: { productId: prodId } });
     })
-    .then(result => {
+    .then((result) => {
       res.redirect('/');
     })
     .catch((error) => {
@@ -93,14 +77,6 @@ exports.getOrdersPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
   const cart = userUtil.returnCart(req, res, next);
   let fetchedOrders = [];
-
-  if (!user.admin) {
-    return res.render('404.ejs', {
-      pageTitle: 'Nu sunteți administrator',
-      user: user,
-      cart: cart,
-    });
-  }
 
   Order.findAll()
     .then((orders) => {
@@ -131,14 +107,6 @@ exports.getOrderDetailsPage = (req, res, next) => {
   if (!user.name) {
     return res.render('notAuth.ejs', {
       pageTitle: 'Nu sunteți autentificat.',
-      user: user,
-      cart: cart,
-    });
-  }
-
-  if (!user.admin) {
-    return res.render('404.ejs', {
-      pageTitle: 'Nu sunteți administrator.',
       user: user,
       cart: cart,
     });
@@ -183,14 +151,6 @@ exports.getOrdersStatusPage = (req, res, next) => {
   const cart = userUtil.returnCart(req, res, next);
   const orderStatus = req.params.orderStatus;
   let fetchedOrders = [];
-
-  if (!user.admin) {
-    return res.render('404.ejs', {
-      pageTitle: 'Nu sunteți administrator',
-      user: user,
-      cart: cart,
-    });
-  }
 
   if (orderStatus === 'sent') {
     return Order.findAll({ where: { sent: true } })
@@ -274,14 +234,6 @@ exports.postSetOrderSent = (req, res, next) => {
   const orderId = req.body.orderId;
   const url = req.body.url;
 
-  if (!user.admin) {
-    return res.render('404.ejs', {
-      pageTitle: 'Nu sunteți administrator',
-      user: user,
-      cart: cart,
-    });
-  }
-
   Order.findByPk(orderId)
     .then((order) => {
       return order.update({ sent: true, processing: false, finished: false, cancelled: false });
@@ -296,14 +248,6 @@ exports.postSetOrderProcessing = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
   const orderId = req.body.orderId;
   const url = req.body.url;
-
-  if (!user.admin) {
-    return res.render('404.ejs', {
-      pageTitle: 'Nu sunteți administrator',
-      user: user,
-      cart: cart,
-    });
-  }
 
   Order.findByPk(orderId)
     .then((order) => {
@@ -320,14 +264,6 @@ exports.postSetOrderFinished = (req, res, next) => {
   const orderId = req.body.orderId;
   const url = req.body.url;
 
-  if (!user.admin) {
-    return res.render('404.ejs', {
-      pageTitle: 'Nu sunteți administrator',
-      user: user,
-      cart: cart,
-    });
-  }
-
   Order.findByPk(orderId)
     .then((order) => {
       return order.update({ sent: false, processing: false, finished: true, cancelled: false });
@@ -342,14 +278,6 @@ exports.postSetOrderCancelled = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
   const orderId = req.body.orderId;
   const url = req.body.url;
-
-  if (!user.admin) {
-    return res.render('404.ejs', {
-      pageTitle: 'Nu sunteți administrator',
-      user: user,
-      cart: cart,
-    });
-  }
 
   Order.findByPk(orderId)
     .then((order) => {

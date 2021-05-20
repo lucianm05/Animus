@@ -10,14 +10,6 @@ exports.getUserPanelPage = (req, res, next) => {
   const cart = userUtil.returnCart(req, res, next);
   let addresses;
 
-  if (!user.name) {
-    return res.render('notAuth.ejs', {
-      pageTitle: 'Nu sunteți autentificat',
-      user: user,
-      cart: cart,
-    });
-  }
-
   User.findByPk(user.id)
     .then((user) => {
       UserAddress.findAll({ where: { userId: user.id } })
@@ -167,14 +159,6 @@ exports.getUserOrdersPage = (req, res, next) => {
   const cart = userUtil.returnCart(req, res, next);
   let fetchedOrders = [];
 
-  if (!user.name) {
-    return res.render('notAuth.ejs', {
-      pageTitle: 'Nu sunteți autentificat',
-      user: user,
-      cart: cart,
-    });
-  }
-
   User.findByPk(user.id)
     .then((user) => {
       return Order.findAll({ where: { userId: user.id } });
@@ -203,14 +187,6 @@ exports.getOrderDetailsPage = (req, res, next) => {
   const fetchedOrderItems = [];
   let fetchedOrder;
   let totalCartPrice = 0;
-
-  if (!user.name) {
-    return res.render('notAuth.ejs', {
-      pageTitle: 'Nu sunteți autentificat',
-      user: user,
-      cart: cart,
-    });
-  }
 
   User.findByPk(user.id)
     .then((user) => {

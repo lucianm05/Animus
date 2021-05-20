@@ -97,6 +97,7 @@
                     <button type='submit'><strong class='text-primary'>Marchează trimisă</strong></button>
                     <input type="hidden" name="orderId" value='<%= order.id %>'>
                     <input type="hidden" name="url" value='/admin/order/<%= order.id %>'>
+                    <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
                   </form>
                 </div>
                 <div class='w-100 text-center'>
@@ -104,6 +105,7 @@
                     <button type='submit'><strong class='text-info'>Marchează în procesare</strong></button>
                     <input type="hidden" name="orderId" value='<%= order.id %>'>
                     <input type="hidden" name="url" value='/admin/order/<%= order.id %>'>
+                    <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
                   </form>
                 </div>
               </div>
@@ -113,6 +115,7 @@
                     <button type='submit'><strong class='text-success'>Marchează finalizată</strong></button>
                     <input type="hidden" name="orderId" value='<%= order.id %>'>
                     <input type="hidden" name="url" value='/admin/order/<%= order.id %>'>
+                    <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
                   </form>
                 </div>
                 <div class='w-100 text-center'>
@@ -120,6 +123,7 @@
                     <button type='submit'><strong class='text-danger'>Marchează anulată</strong></button>
                     <input type="hidden" name="orderId" value='<%= order.id %>'>
                     <input type="hidden" name="url" value='/admin/order/<%= order.id %>'>
+                    <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
                   </form>
                 </div>
               </div>

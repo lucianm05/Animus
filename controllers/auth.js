@@ -84,9 +84,8 @@ exports.postSignIn = (req, res, next) => {
 };
 
 exports.postLogout = (req, res, next) => {
-  const session = req.session;
-
-  req.session.destroy(session);
-
-  res.redirect('/');
+  req.session.destroy((err) => {
+    console.log(err);
+    res.redirect('/');
+  });
 };

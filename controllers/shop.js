@@ -21,9 +21,7 @@ exports.getIndexPage = (req, res, next) => {
     .then((result) => {
       res.render('shop/index.ejs', {
         pageTitle: 'Animus',
-        user: user,
         products: products,
-        cart: cart,
       });
     })
     .catch((error) => console.log(error));
@@ -72,19 +70,7 @@ exports.getSearch = (req, res, next) => {
 exports.getCartPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
   let cart = [];
-  let loggedIn = false;
   let totalCartPrice = 0;
-
-  if (user.name) {
-    loggedIn = true;
-  }
-
-  if (!loggedIn) {
-    return res.render('notAuth.ejs', {
-      pageTitle: 'Nu sunteți autentificat!',
-      user: user,
-    });
-  }
 
   Cart.findOne({ where: { userId: user.id } })
     .then((cart) => {
@@ -123,7 +109,6 @@ exports.getCartPage = (req, res, next) => {
 exports.postAddToCart = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
   const url = req.body.url;
-  let loggedIn = false;
   const prodId = req.body.prodId;
   const prodName = req.body.prodName;
   const prodImage = req.body.prodImage;
@@ -131,17 +116,6 @@ exports.postAddToCart = (req, res, next) => {
   let fetchedCart;
   let newQuantity = 1;
   let newPrice = prodPrice;
-
-  if (user.name) {
-    loggedIn = true;
-  }
-
-  if (!loggedIn) {
-    return res.render('notAuth.ejs', {
-      pageTitle: 'Nu sunteți autentificat!',
-      user: user,
-    });
-  }
 
   Cart.findOne({ where: { userId: user.id } })
     .then((cart) => {
@@ -168,20 +142,7 @@ exports.postAddToCart = (req, res, next) => {
 
 exports.postRemoveFromCart = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
-  let loggedIn = false;
   const prodId = req.body.prodId;
-  console.log(prodId);
-
-  if (user.name) {
-    loggedIn = true;
-  }
-
-  if (!loggedIn) {
-    return res.render('notAuth.ejs', {
-      pageTitle: 'Nu sunteți autentificat!',
-      user: user,
-    });
-  }
 
   Cart.findOne({ where: { userId: user.id } })
     .then((cart) => {
@@ -195,21 +156,9 @@ exports.postRemoveFromCart = (req, res, next) => {
 
 exports.postIncreaseCartQuantity = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
-  let loggedIn = false;
   const prodId = req.body.prodId;
   let newQuantity = 0;
   let newPrice = 0;
-
-  if (user.name) {
-    loggedIn = true;
-  }
-
-  if (!loggedIn) {
-    return res.render('notAuth.ejs', {
-      pageTitle: 'Nu sunteți autentificat!',
-      user: user,
-    });
-  }
 
   Cart.findOne({ where: { userId: user.id } })
     .then((cart) => {
@@ -293,14 +242,6 @@ exports.getOrderPage = (req, res, next) => {
   const userAddressId = req.params.userAddressId;
   let totalCartPrice = 0;
 
-  if (!user.name) {
-    res.render('notAuth.ejs', {
-      pageTitle: 'Nu sunteți autentificat!',
-      user: user,
-      cart: cart,
-    });
-  }
-
   if (cart.length <= 0) {
     res.render('404.ejs', {
       pageTitle: 'Coșul de cumpărături este gol',
@@ -336,14 +277,6 @@ exports.postFinishOrder = (req, res, next) => {
   const userAddressId = req.body.userAddressId;
   const deliveryMethod = req.body.deliveryMethod;
   const payMethod = req.body.payMethod;
-
-  if (!user.name) {
-    res.render('notAuth.ejs', {
-      pageTitle: 'Nu sunteți autentificat!',
-      user: user,
-      cart: cart,
-    });
-  }
 
   if (cart.length <= 0) {
     res.render('404.ejs', {

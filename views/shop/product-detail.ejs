@@ -39,6 +39,7 @@
                       <input type="hidden" name="prodPrice" value='<%= product.price %>'>
                       <input type="hidden" name="prodImage" value='<%= product.image %>'>
                       <input type="hidden" name='url' value='/product/<%= product.id %>'>
+                      <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
                     </form>
                   </div>
                   <% if (user.admin) { %>
@@ -84,6 +85,7 @@
                 <input type="hidden" name="prodPrice" value='<%= product.price %>'>
                 <input type="hidden" name="prodImage" value='<%= product.image %>'>
                 <input type="hidden" name='url' value='/product/<%= product.id %>'>
+                <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
               </form>
             </div>
             <% if (user.admin) { %>
@@ -110,6 +112,7 @@
               <form action="/admin/delete-product" method="POST">
                 <button type='submit' class='button-secondary'>Șterge produsul</button>
                 <input type="hidden" name='prodId' value='<%= product.id %>'>
+                <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
               </form>
             </div>
           </div> 
@@ -165,6 +168,7 @@
               <% } %>
             </div>
             <input type="hidden" name="url" value='/product/<%= product.id %>'>
+            <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
           </form>
         </div>
       </section>

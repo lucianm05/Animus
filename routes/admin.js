@@ -2,26 +2,28 @@ const express = require('express');
 
 const router = express.Router();
 
+const guardingUtil = require('../util/guardingUtil');
+
 const adminController = require('../controllers/admin');
 
-router.get('/admin/add-product', adminController.getAddProductPage);
+router.get('/admin/add-product', guardingUtil.isAdmin, adminController.getAddProductPage);
 
-router.post('/admin/add-product', adminController.postAddProductPage);
+router.post('/admin/add-product', guardingUtil.isAdmin, adminController.postAddProductPage);
 
-router.post('/admin/delete-product', adminController.postDeleteProduct);
+router.post('/admin/delete-product', guardingUtil.isAdmin, adminController.postDeleteProduct);
 
-router.get('/admin/orders', adminController.getOrdersPage);
+router.get('/admin/orders', guardingUtil.isAdmin,adminController.getOrdersPage);
 
-router.get('/admin/orders/:orderStatus', adminController.getOrdersStatusPage);
+router.get('/admin/orders/:orderStatus', guardingUtil.isAdmin, adminController.getOrdersStatusPage);
 
-router.get('/admin/order/:orderId', adminController.getOrderDetailsPage);
+router.get('/admin/order/:orderId', guardingUtil.isAdmin, adminController.getOrderDetailsPage);
 
-router.post('/admin/set-order-sent', adminController.postSetOrderSent);
+router.post('/admin/set-order-sent', guardingUtil.isAdmin, adminController.postSetOrderSent);
 
-router.post('/admin/set-order-processing', adminController.postSetOrderProcessing);
+router.post('/admin/set-order-processing', guardingUtil.isAdmin, adminController.postSetOrderProcessing);
 
-router.post('/admin/set-order-finished', adminController.postSetOrderFinished);
+router.post('/admin/set-order-finished', guardingUtil.isAdmin, adminController.postSetOrderFinished);
 
-router.post('/admin/set-order-cancelled', adminController.postSetOrderCancelled);
+router.post('/admin/set-order-cancelled', guardingUtil.isAdmin, adminController.postSetOrderCancelled);
 
 module.exports = router;

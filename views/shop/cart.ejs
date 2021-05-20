@@ -28,6 +28,7 @@
                             </svg>
                             <input type="hidden" name="prodId" value='<%= prod.prodId %>'>
                           </button>
+                          <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
                         </form>
                       </div>
                       <p><%= prod.price %> RON/buc</p>
@@ -43,6 +44,7 @@
                           </svg>
                         </button>
                         <input type="hidden" name="prodId" value='<%= prod.prodId %>'>
+                        <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
                       </form>
                     </div>
                   </div>
@@ -65,6 +67,7 @@
                                 </svg>
                                 <input type="hidden" name="prodId" value='<%= prod.prodId %>'>
                               </button>
+                              <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
                             </form>
                         </div>
                         <p><%= prod.price %> RON/buc</p>
@@ -83,6 +86,7 @@
                             </svg>
                           </button>
                           <input type="hidden" name="prodId" value='<%= prod.prodId %>'>
+                          <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
                         </form>
                       </div>
                     </div>
@@ -125,6 +129,7 @@
                       <div class='buttons d-flex flex-column align-items-center'>
                         <form class='mt-3' action="/send-order/<%= address.id %>" method="GET">
                           <button type='submit' class='button'>Selectează adresă</button>
+                          <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
                         </form>
                       </div>
                     </div>

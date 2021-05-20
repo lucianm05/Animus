@@ -5,8 +5,7 @@
 <body>
   <%- include('../includes/navigation.ejs') %>
   <main>
-
-    <% if (user.admin) { %>
+    
       <div class='mb-5'>
         <div class='d-flex flex-column flex-lg-row'>
           <div class='d-none d-lg-flex flex-row w-100'>
@@ -98,11 +97,6 @@
           <% } %>
         </div>
       </section>
-    <% } else { %>
-      <div class='w-100 text-center'>
-        <h1>Nu aveți acces.</h1>
-      </div>
-    <% } %>
 
   </main>
 

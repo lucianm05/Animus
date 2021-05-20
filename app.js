@@ -3,8 +3,11 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const csrf = require('csurf');
 
 const app = express();
+
+const csrfProtection = csrf();
 
 const errorController = require('./controllers/error');
 // Toate rutele
@@ -39,6 +42,7 @@ app.use(
     store: store,
   })
 );
+app.use(csrfProtection);
 
 app.use((req, res, next) => {
   // Verificăm dacă există un user autentificat
@@ -70,7 +74,7 @@ app.use((req, res, next) => {
               // Dacă s-au găsit produse, le setăm în fiecare request pentru a le afișa în navbar
               if (cartItems) {
                 req.cart = cartItems;
-              // Dacă nu s-au găsit produse, setăm coșul de cumpărături gol pentru a afișa număru „0” în navbar
+                // Dacă nu s-au găsit produse, setăm coșul de cumpărături gol pentru a afișa număru „0” în navbar
               } else {
                 req.cart = [];
               }
@@ -78,7 +82,7 @@ app.use((req, res, next) => {
               return next();
             })
             .catch((error) => console.log(error));
-        // Dacă nu s-a găsit un coș de cumpărături corespunzător userului, creăm unul
+          // Dacă nu s-a găsit un coș de cumpărături corespunzător userului, creăm unul
         } else {
           return Cart.create({ userId: req.user.id })
             .then((cart) => {
@@ -96,6 +100,30 @@ app.use((req, res, next) => {
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
+
+app.use((req, res, next) => {
+  let user = {
+    name: null,
+    email: null,
+    password: null,
+  };
+  let cart = [];
+
+  if (req.user) {
+    res.locals.user = req.user;
+  } else {
+    res.locals.user = user;
+  }
+
+  if (req.cart) {
+    res.locals.cart = req.cart;
+  } else {
+    res.locals.cart = cart;
+  }
+
+  res.locals.csrfToken = req.csrfToken();
+  return next();
+});
 
 // Folosim toate rutele
 app.use(userRoutes);

@@ -94,6 +94,7 @@
                 <button type='submit'><strong class='text-danger'>Anulează comanda</strong></button>
                 <input type="hidden" name="orderId" value='<%= order.id %>'>
                 <input type="hidden" name="url" value='/user-orders/<%= order.id %>'>
+                <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
               </form>
             </div>
           <% } %>

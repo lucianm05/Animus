@@ -4,60 +4,72 @@
 <body>
   <%- include('../includes/navigation.ejs') %>
   <main>
-      <div class='container'>
-        <div class='row'>
-          <form class='custom-form' action='/admin/add-product' method='POST'>
-            <div class='m-auto'>
-              <div class='mb-3'>
-                <label class='d-block' for='animalCategory'>Pentru ce tip de animale este produsul?</label>
-                <select class='w-100' name='animalCategory' id='animalCategory' required>
-                  <option value='caini'>Câini</option>
-                  <option value='pisici'>Pisici</option>
-                  <option value='cai'>Cai</option>
-                  <option value='pesti'>Pești</option>
-                  <option value='pasari'>Păsări</option>
-                  <option value='reptile'>Reptile</option>
-                  <option value='rozatoare'>Rozătoare</option>
-                </select>
-              </div>
-              
-              <div class='mb-3'>
-                <label class='d-block' for='productType'>Ce tip de produs este?</label>
-                <select name='productType' id='productType' required>
-                  <option value='hrana'>Hrană</option>
-                  <option value='jucarii'>Jucării</option>
-                  <option value='accesorii'>Accesorii</option>
-                </select>
-              </div>
-              
-              <div class='mb-3'>
-                <label class='d-block' for='name'>Nume:</label>
-                <input type='text' name='name' id='name' required>
-              </div>
-  
-              <div class='mb-3'>
-                <label class='d-block' for='image'>Imagine:</label>
-                <input type='text' name='image' id='image' required>
-              </div>
-  
-              <div class='mb-3'>
-                <label class='d-block' for='price'>Preț:</label>
-                <input type='number' name='price' id='price' step="0.01" required>
-              </div>
-  
-              <div class='mb-3'>
-                <label class='d-block' for='description'>Descriere:</label>
-                <textarea name="description" id="description" cols="30" rows="5" required></textarea>
-              </div>
-  
-              <div class='mb-3 text-center'>
-                <button type='submit' class='button'>Adaugă</button>
-              </div>
-            </div>
-            <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
-          </form>
+    <div class='my-4'>
+      <% if (errorMessage.length > 0) { %>
+        <div class='user-message error d-flex align-items-center'>
+          <h3><%= errorMessage %></h3>
         </div>
+      <% } %>
+      <% if (successMessage.length > 0) { %>
+        <div class='user-message success d-flex align-items-center'>
+          <h3><%= successMessage %></h3>
+        </div>
+      <% } %>
+    </div>
+    <div class='container'>
+      <div class='row'>
+        <form class='custom-form' action='/admin/add-product' method='POST'>
+          <div class='m-auto'>
+            <div class='mb-3'>
+              <label class='d-block' for='animalCategory'>Pentru ce tip de animale este produsul?</label>
+              <select class='w-100' name='animalCategory' id='animalCategory' required>
+                <option value='caini'>Câini</option>
+                <option value='pisici'>Pisici</option>
+                <option value='cai'>Cai</option>
+                <option value='pesti'>Pești</option>
+                <option value='pasari'>Păsări</option>
+                <option value='reptile'>Reptile</option>
+                <option value='rozatoare'>Rozătoare</option>
+              </select>
+            </div>
+            
+            <div class='mb-3'>
+              <label class='d-block' for='productType'>Ce tip de produs este?</label>
+              <select name='productType' id='productType' required>
+                <option value='hrana'>Hrană</option>
+                <option value='jucarii'>Jucării</option>
+                <option value='accesorii'>Accesorii</option>
+              </select>
+            </div>
+            
+            <div class='mb-3'>
+              <label class='d-block' for='name'>Nume:</label>
+              <input type='text' name='name' id='name' required>
+            </div>
+
+            <div class='mb-3'>
+              <label class='d-block' for='image'>Imagine:</label>
+              <input type='text' name='image' id='image' required>
+            </div>
+
+            <div class='mb-3'>
+              <label class='d-block' for='price'>Preț:</label>
+              <input type='number' name='price' id='price' step="0.01" required>
+            </div>
+
+            <div class='mb-3'>
+              <label class='d-block' for='description'>Descriere:</label>
+              <textarea name="description" id="description" cols="30" rows="5" required></textarea>
+            </div>
+
+            <div class='mb-3 text-center'>
+              <button type='submit' class='button'>Adaugă</button>
+            </div>
+          </div>
+          <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
+        </form>
       </div>
+    </div>
   </main>
 
 <%- include('../includes/end.ejs') %>

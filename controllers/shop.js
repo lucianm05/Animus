@@ -8,10 +8,9 @@ const UserAddress = require('../models/User-Address');
 const Order = require('../models/Order');
 const OrderItem = require('../models/Order-Item');
 const { Op } = require('sequelize');
+const fetch = require('node-fetch');
 
 exports.getIndexPage = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
-  const cart = userUtil.returnCart(req, res, next);
   let products = [];
 
   Product.findAll()
@@ -22,14 +21,14 @@ exports.getIndexPage = (req, res, next) => {
       res.render('shop/index.ejs', {
         pageTitle: 'Animus',
         products: products,
+        errorMessage: req.flash('errorMessage'),
+        successMessage: req.flash('successMessage'),
       });
     })
     .catch((error) => console.log(error));
 };
 
 exports.getAnimalCategoryPage = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
-  const cart = userUtil.returnCart(req, res, next);
   const animalCategory = req.params.category;
   const title = animalCategory.charAt(0).toUpperCase() + animalCategory.slice(1);
   let products = [];
@@ -41,27 +40,25 @@ exports.getAnimalCategoryPage = (req, res, next) => {
     .then((result) => {
       res.render('shop/product-category.ejs', {
         pageTitle: title,
-        user: user,
         products: products,
-        cart: cart,
         animalCategory: animalCategory,
+        errorMessage: req.flash('errorMessage'),
+        successMessage: req.flash('successMessage'),
       });
     })
     .catch((error) => console.log(error));
 };
 
 exports.getSearch = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
-  const cart = userUtil.returnCart(req, res, next);
   const searchParams = req.body.searchParams.split(' ');
 
   Product.findAll({ where: { name: { [Op.like]: '%' + searchParams[0] + '%' } } })
     .then((result) => {
       res.render('shop/index.ejs', {
         pageTitle: 'Rezultatele căutării',
-        user: user,
         products: result,
-        cart: cart,
+        errorMessage: req.flash('errorMessage'),
+        successMessage: req.flash('successMessage'),
       });
     })
     .catch((error) => console.log(error));
@@ -71,6 +68,7 @@ exports.getCartPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
   let cart = [];
   let totalCartPrice = 0;
+  let addresses;
 
   Cart.findOne({ where: { userId: user.id } })
     .then((cart) => {
@@ -92,16 +90,27 @@ exports.getCartPage = (req, res, next) => {
       });
     })
     .then((result) => {
-      return UserAddress.findAll({ where: { userId: user.id } });
-    })
-    .then((addresses) => {
-      res.render('shop/cart.ejs', {
-        pageTitle: 'Coș',
-        cart: cart,
-        user: user,
-        totalCartPrice: totalCartPrice.toFixed(2),
-        addresses: addresses,
-      });
+      return UserAddress.findAll({ where: { userId: user.id } })
+        .then((userAddresses) => {
+          addresses = userAddresses;
+          fetch('https://roloca.coldfuse.io/judete').then((result) => {
+            result
+              .json()
+              .then((states) => {
+                res.render('shop/cart.ejs', {
+                  pageTitle: 'Coș',
+                  totalCartPrice: totalCartPrice.toFixed(2),
+                  addresses: addresses,
+                  cart: cart,
+                  states: states,
+                  errorMessage: req.flash('errorMessage'),
+                  successMessage: req.flash('successMessage'),
+                });
+              })
+              .catch((error) => console.log(error));
+          });
+        })
+        .catch((error) => console.log(error));
     })
     .catch((error) => console.log(error));
 };
@@ -135,7 +144,11 @@ exports.postAddToCart = (req, res, next) => {
       }
     })
     .then((result) => {
-      res.redirect(url);
+      req.flash('successMessage', 'Produsul a fost adăugat în coș.');
+      return req.session.save((err) => {
+        console.log(err);
+        res.redirect(url);
+      });
     })
     .catch((error) => console.log(error));
 };
@@ -149,7 +162,11 @@ exports.postRemoveFromCart = (req, res, next) => {
       return CartItem.destroy({ where: { productId: prodId, cartId: cart.id } });
     })
     .then((result) => {
-      res.redirect('/cart');
+      req.flash('successMessage', 'Produsul a fost eliminat din coș.');
+      return req.session.save((err) => {
+        console.log(err);
+        res.redirect('/cart');
+      });
     })
     .catch((error) => console.log(error));
 };
@@ -172,14 +189,16 @@ exports.postIncreaseCartQuantity = (req, res, next) => {
       return product.update({ quantity: newQuantity, totalPrice: newPrice.toFixed(2) });
     })
     .then((result) => {
-      res.redirect('/cart');
+      req.flash('successMessage', 'Produsul a fost adăugat în coș.');
+      return req.session.save((err) => {
+        console.log(err);
+        res.redirect('/cart');
+      });
     })
     .catch((error) => console.log(error));
 };
 
 exports.getProductDetailPage = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
-  const cart = userUtil.returnCart(req, res, next);
   const productId = req.params.prodId;
   const reviews = [];
   let prod;
@@ -204,11 +223,11 @@ exports.getProductDetailPage = (req, res, next) => {
     .then((result) => {
       res.render('shop/product-detail.ejs', {
         pageTitle: 'Animus',
-        user: user,
-        cart: cart,
         product: prod,
         reviews: reviews,
         rating: (rating / reviews.length).toFixed(2),
+        errorMessage: req.flash('errorMessage'),
+        successMessage: req.flash('successMessage'),
       });
     })
     .catch((error) => console.log(error));
@@ -231,7 +250,11 @@ exports.postAddReview = (req, res, next) => {
       });
     })
     .then((result) => {
-      res.redirect(url);
+      req.flash('successMessage', 'Recenzia a fost adăugată cu succes.');
+      return req.session.save((err) => {
+        console.log(err);
+        res.redirect(url);
+      });
     })
     .catch((error) => console.log(error));
 };
@@ -245,8 +268,6 @@ exports.getOrderPage = (req, res, next) => {
   if (cart.length <= 0) {
     res.render('404.ejs', {
       pageTitle: 'Coșul de cumpărături este gol',
-      user: user,
-      cart: cart,
     });
   }
 
@@ -262,10 +283,8 @@ exports.getOrderPage = (req, res, next) => {
     .then((address) => {
       res.render('shop/send-order.ejs', {
         pageTitle: 'Finalizează comanda',
-        user: user,
         address: address,
         totalCartPrice: totalCartPrice.toFixed(2),
-        cart: cart,
       });
     })
     .catch((error) => console.log(error));
@@ -281,8 +300,6 @@ exports.postFinishOrder = (req, res, next) => {
   if (cart.length <= 0) {
     res.render('404.ejs', {
       pageTitle: 'Coșul de cumpărături este gol',
-      user: user,
-      cart: cart,
     });
   }
 
@@ -313,10 +330,14 @@ exports.postFinishOrder = (req, res, next) => {
       });
     })
     .then((result) => {
-      return CartItem.destroy({ where: { cartId: cart[0].cartId, userId: user.id } })
+      return CartItem.destroy({ where: { cartId: cart[0].cartId, userId: user.id } });
     })
     .then((result) => {
-      res.redirect('/cart');
+      req.flash('successMessage', 'Comanda a fost trimisă.');
+      return req.session.save((err) => {
+        console.log(err);
+        res.redirect('/cart');
+      })
     })
     .catch((error) => console.log(error));
 };

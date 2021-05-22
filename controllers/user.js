@@ -4,27 +4,27 @@ const User = require('../models/User');
 const UserAddress = require('../models/User-Address');
 const Order = require('../models/Order');
 const OrderItem = require('../models/Order-Item');
+const bcrypt = require('bcryptjs');
 
 exports.getUserPanelPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
-  const cart = userUtil.returnCart(req, res, next);
   let addresses;
 
   User.findByPk(user.id)
     .then((user) => {
       UserAddress.findAll({ where: { userId: user.id } })
-        .then((result) => {
-          addresses = result;
+        .then((userAddresses) => {
+          addresses = userAddresses;
           fetch('https://roloca.coldfuse.io/judete').then((result) => {
             result
               .json()
               .then((states) => {
                 res.render('user/user-panel.ejs', {
-                  user: user,
                   pageTitle: 'Panoul utilizatorului',
-                  cart: cart,
                   states: states,
                   addresses: addresses,
+                  errorMessage: req.flash('errorMessage'),
+                  successMessage: req.flash('successMessage'),
                 });
               })
               .catch((error) => console.log(error));
@@ -43,10 +43,18 @@ exports.postEditUsername = (req, res, next) => {
     .then((user) => {
       if (user.name !== newUsername) {
         user.update({ name: newUsername });
+        req.flash('successMessage', 'Numele de utilizator a fost schimbat cu succes.');
+        return req.session.save((error) => {
+          console.log(error);
+          res.redirect('/user-panel');
+        });
       }
-    })
-    .then((result) => {
-      res.redirect('/user-panel');
+
+      req.flash('errorMessage', 'Numele de utilizator nu poate fi egal cu cel vechi.');
+      return req.session.save((error) => {
+        console.log(error);
+        res.redirect('/user-panel');
+      });
     })
     .catch((error) => console.log(error));
 };
@@ -59,10 +67,18 @@ exports.postEditEmail = (req, res, next) => {
     .then((user) => {
       if (user.email !== newEmail) {
         user.update({ email: newEmail });
+        req.flash('successMessage', 'Adresa de email a fost schimbată cu succes.');
+        return req.session.save((error) => {
+          console.log(error);
+          res.redirect('/user-panel');
+        });
       }
-    })
-    .then((result) => {
-      res.redirect('/user-panel');
+
+      req.flash('errorMessage', 'Adresa de email nu poate fi egală cu cea veche.');
+      return req.session.save((error) => {
+        console.log(error);
+        res.redirect('/user-panel');
+      });
     })
     .catch((error) => console.log(error));
 };
@@ -73,18 +89,37 @@ exports.postEditPassword = (req, res, next) => {
 
   User.findByPk(user.id)
     .then((user) => {
-      if (user.password !== newPassword) {
-        user.update({ password: newPassword });
-      }
-    })
-    .then((result) => {
-      res.redirect('/user-panel');
+      bcrypt
+        .compare(newPassword, user.password)
+        .then((doMatch) => {
+          if (doMatch) {
+            req.flash('errorMessage', 'Parola nouă nu poate fi egală cu cea veche.');
+            return req.session.save((error) => {
+              console.log(error);
+              res.redirect('/user-panel');
+            });
+          }
+
+          bcrypt
+            .hash(newPassword, 12)
+            .then((hashedPassword) => {
+              user.update({ password: hashedPassword });
+              req.flash('successMessage', 'Parola a fost schimbată.');
+              return req.session.save((error) => {
+                console.log(error);
+                res.redirect('/user-panel');
+              });
+            })
+            .catch((error) => console.log(error));
+        })
+        .catch((error) => console.log(error));
     })
     .catch((error) => console.log(error));
 };
 
 exports.postUserAddress = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
+  const url = req.body.url;
   let userCountry = '';
   let userState = '';
   let userCity = '';
@@ -112,14 +147,15 @@ exports.postUserAddress = (req, res, next) => {
         fullName: userFullName,
         phoneNumber: userPhoneNumber,
         userId: user.id,
+      }).then((result) => {
+        req.flash('successMessage', 'Adresa a fost adăugată cu succes.');
+        return req.session.save((err) => {
+          console.log(err);
+          res.redirect(url);
+        });
       });
     })
-    .then((result) => {
-      res.redirect('/user-panel');
-    })
     .catch((error) => console.log(error));
-
-  res.redirect('/user-panel');
 };
 
 exports.postDeleteUserAddress = (req, res, next) => {
@@ -131,7 +167,11 @@ exports.postDeleteUserAddress = (req, res, next) => {
       return UserAddress.destroy({ where: { userId: user.id, id: userAddressId } });
     })
     .then((result) => {
-      res.redirect('/user-panel');
+      req.flash('successMessage', 'Adresa a fost ștearsă.');
+      return req.session.save((err) => {
+        console.log(err);
+        res.redirect('/user-panel');
+      });
     })
     .catch((error) => console.log(error));
 };
@@ -149,14 +189,17 @@ exports.postSetDefaultUserAddress = (req, res, next) => {
       return UserAddress.update({ default: true }, { where: { userId: userId, id: userAddressId } });
     })
     .then((result) => {
-      res.redirect('/user-panel');
+      req.flash('successMessage', 'Adresa a fost setată principală.');
+        return req.session.save((err) => {
+          console.log(err);
+          res.redirect('/user-panel');
+        });
     })
     .catch((error) => console.log(error));
 };
 
 exports.getUserOrdersPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
-  const cart = userUtil.returnCart(req, res, next);
   let fetchedOrders = [];
 
   User.findByPk(user.id)
@@ -172,8 +215,6 @@ exports.getUserOrdersPage = (req, res, next) => {
     .then((result) => {
       res.render('user/orders.ejs', {
         pageTitle: 'Comenzile tale',
-        user: user,
-        cart: cart,
         orders: fetchedOrders,
       });
     })
@@ -182,7 +223,6 @@ exports.getUserOrdersPage = (req, res, next) => {
 
 exports.getOrderDetailsPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
-  const cart = userUtil.returnCart(req, res, next);
   const orderId = req.params.orderId;
   const fetchedOrderItems = [];
   let fetchedOrder;
@@ -196,8 +236,6 @@ exports.getOrderDetailsPage = (req, res, next) => {
       if (!order) {
         return res.render('404.ejs', {
           pageTitle: 'Pagina nu a fost găsită',
-          user: user,
-          cart: cart,
         });
       }
       order.dataValues.createdAt = order.dataValues.createdAt.toString().split(' ').slice(1, 4).join(' ');
@@ -205,7 +243,7 @@ exports.getOrderDetailsPage = (req, res, next) => {
       return OrderItem.findAll({ where: { orderId: order.id } });
     })
     .then((orderItems) => {
-      if(orderItems) {
+      if (orderItems) {
         return orderItems.forEach((item) => {
           totalCartPrice += item.dataValues.totalPrice;
           item.dataValues.price = item.dataValues.price.toFixed(2);
@@ -215,13 +253,11 @@ exports.getOrderDetailsPage = (req, res, next) => {
       }
     })
     .then((order) => {
-      return UserAddress.findByPk(fetchedOrder.userAddressId);
+      return UserAddress.findByPk(fetchedOrder.userAddressId, { paranoid: false });
     })
     .then((userAddress) => {
       res.render('user/order-detail.ejs', {
         pageTitle: `Comanda #${orderId}`,
-        user: user,
-        cart: cart,
         orderItems: fetchedOrderItems,
         totalCartPrice: totalCartPrice.toFixed(2),
         userAddress: userAddress,
@@ -232,7 +268,6 @@ exports.getOrderDetailsPage = (req, res, next) => {
 };
 
 exports.postCancelUserOrder = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
   const orderId = req.body.orderId;
   const url = req.body.url;
 

@@ -1,10 +1,25 @@
 <%- include('../includes/head.ejs') %>
 <link rel="stylesheet" href="/css/cart.css">
+<% if (!(addresses.length > 0)) { %>
+    <link rel="stylesheet" href="/css/user-panel.css">
+<% } %>
 </head>
 
 <body>
   <%- include('../includes/navigation.ejs') %>
   <main>
+    <div class='my-4'>
+      <% if (errorMessage.length > 0) { %>
+        <div class='user-message error d-flex align-items-center'>
+          <h3><%= errorMessage %></h3>
+        </div>
+      <% } %>
+      <% if (successMessage.length > 0) { %>
+        <div class='user-message success d-flex align-items-center'>
+          <h3><%= successMessage %></h3>
+        </div>
+      <% } %>
+    </div>
     <section>
       <% if (cart.length > 0) { %>
         <ul class='cart-list'>
@@ -138,6 +153,56 @@
               </ul>
             <% } else { %>
               <p>Nicio adresă salvată.</p>
+              <section class='address-info my-3 d-flex flex-column align-items-center justify-content-center text-center'>
+                <div class='d-flex flex-row align-items-center justify-content-center mb-3'>
+                  <h3>Adaugă o adresă</h3>
+                    <svg id='addressFormButton' xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-plus" viewBox="0 0 16 16">
+                      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                </div>
+                <form action='/add-user-address' method='post' id='addressForm' style='display: none;'>
+                  <div class='mb-3'>
+                    <label class='d-block' for="country">Țara</label>
+                    <select name="country" id="country" required>
+                      <option value="RO">România</option>
+                    </select>
+                  </div>
+                  <div class='mb-3'>
+                    <label class='d-block' for="state">Județ</label>
+                    <select name="state" id="state" required>
+                      <option value="" disabled selected>Selectează județul</option>
+                      <% states.forEach(state => { %>
+                        <option value="<%= state.auto %>"><%= state.nume %></option>
+                      <% }) %>
+                    </select>
+                  </div>
+                  <div class='mb-3'>
+                    <label class='d-block' for="city">Localitate</label>
+                    <select name="city" id="city" required>
+                      <option value="" disabled selected>Selectează județul mai intâi</option>
+                    </select>
+                  </div>
+                  <div class='mb-3'>
+                    <label class='d-block' for="address">Adresa</label>
+                    <input type="text" name='address' id='address' required>
+                  </div>
+                  <div class='mb-3'>
+                    <label class='d-block' for="zipCode">Cod poștal</label>
+                    <input type="number" name='zipCode' id='zipCode' required>
+                  </div>
+                  <div class='mb-3'>
+                    <label class='d-block' for="fullName">Nume complet</label>
+                    <input type="text" name='fullName' id='fullName' required>
+                  </div>
+                  <div class='mb-3'>
+                    <label class='d-block' for="phoneNumber">Număr de telefon</label>
+                    <input type="text" name='phoneNumber' id='phoneNumber' required>
+                  </div>
+                  <button type='submit' class='button'>Adaugă</button>
+                  <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
+                  <input type="hidden" name="url" value='/cart'>
+                </form>
+              </section>
             <% } %>
           </div>
         </section>
@@ -149,6 +214,8 @@
       <% } %>
     </section>
   </main>
-
+  <% if (!(addresses.length > 0)) { %>
+    <script src='/js/user-panel.js'></script>
+  <% } %>
   <script src="/js/cart.js"></script>
 <%- include('../includes/end.ejs') %>

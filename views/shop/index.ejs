@@ -5,6 +5,18 @@
 <body>
   <%- include('../includes/navigation.ejs') %>
   <main>
+    <div class='my-4'>
+      <% if (errorMessage.length > 0) { %>
+        <div class='user-message error d-flex align-items-center'>
+          <h3><%= errorMessage %></h3>
+        </div>
+      <% } %>
+      <% if (successMessage.length > 0) { %>
+        <div class='user-message success d-flex align-items-center'>
+          <h3><%= successMessage %></h3>
+        </div>
+      <% } %>
+    </div>
     <div class='d-flex align-items-center justify-content-center'>
       <% if (products.length > 0) { %>
         <ul class='product-list'>

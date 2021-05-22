@@ -66,6 +66,15 @@ main {
 
 .address-info {
 
+  input,
+  select {
+    font-size: $secondary-font-size;
+    padding: 5px 10px;
+    border: 2px solid $blue-gray;
+    height: 44px;
+    width: 300px;
+  }
+
   #addressFormButton {
     cursor: pointer;
   }
@@ -77,6 +86,10 @@ main {
 
 #addresses {
   width: 100%;
+
+  #addressesButton {
+    cursor: pointer;
+  }
 
   .address-container {
     width: 100%;
@@ -107,6 +120,27 @@ main {
     height: 110px;
     
   }
+}
+
+.user-message {
+  word-wrap: break-word;
+  width: 350px;
+  height: 80px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 5px 10px;
+
+  h3 {
+    margin: 0 auto;
+  }
+}
+
+.error {
+  background-color: #ff3333;
+}
+
+.success {
+  background-color: rgb(22, 182, 22);
 }
 
 @media (max-width: $lg) {

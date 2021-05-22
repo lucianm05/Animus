@@ -4,31 +4,13 @@ const Order = require('../models/Order');
 const OrderItem = require('../models/Order-Item');
 const User = require('../models/User');
 const UserAddress = require('../models/User-Address');
-const Cart = require('../models/Cart');
 const CartItem = require('../models/Cart-Item');
 
 exports.getAddProductPage = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
-  const cart = userUtil.returnCart(req, res, next);
-  let loggedIn = false;
-
-  // Verificăm dacă utilizatorul este autentificat
-  if (user.name) {
-    loggedIn = true;
-  }
-
-  if (!loggedIn) {
-    return res.render('notAuth.ejs', {
-      pageTitle: 'Nu sunteți autentificat!',
-      user: user,
-      cart: cart,
-    });
-  }
-
   res.render('admin/add-product.ejs', {
     pageTitle: 'Adăugați un produs',
-    user: user,
-    cart: cart,
+    errorMessage: req.flash('errorMessage'),
+    successMessage: req.flash('successMessage'),
   });
 };
 
@@ -41,7 +23,6 @@ exports.postAddProductPage = (req, res, next) => {
   const animalCategory = req.body.animalCategory;
   const productType = req.body.productType;
 
-  // Se crează produsul cu datele introduse de către admin
   Product.create({
     name: productName,
     price: productPrice,
@@ -52,13 +33,16 @@ exports.postAddProductPage = (req, res, next) => {
     userId: user.id,
   })
     .then((result) => {
-      res.redirect('/admin/add-product');
+      req.flash('successMessage', 'Produsul a fost adăugat.');
+      return req.session.save((err) => {
+        console.log(err);
+        res.redirect('/admin/add-product');
+      })
     })
     .catch((error) => console.log(error));
 };
 
 exports.postDeleteProduct = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
   const prodId = req.body.prodId;
 
   Product.destroy({ where: { id: prodId } })
@@ -66,7 +50,11 @@ exports.postDeleteProduct = (req, res, next) => {
       return CartItem.destroy({ where: { productId: prodId } });
     })
     .then((result) => {
-      res.redirect('/');
+      req.flash('successMessage', 'Produsul a fost șters.');
+      return req.session.save((err) => {
+        console.log(err);
+        res.redirect('/');
+      })
     })
     .catch((error) => {
       console.log(error);
@@ -74,8 +62,6 @@ exports.postDeleteProduct = (req, res, next) => {
 };
 
 exports.getOrdersPage = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
-  const cart = userUtil.returnCart(req, res, next);
   let fetchedOrders = [];
 
   Order.findAll()
@@ -88,8 +74,6 @@ exports.getOrdersPage = (req, res, next) => {
     .then((result) => {
       res.render('admin/orders.ejs', {
         pageTitle: 'Comenzi',
-        user: user,
-        cart: cart,
         orders: fetchedOrders,
       });
     })
@@ -98,19 +82,10 @@ exports.getOrdersPage = (req, res, next) => {
 
 exports.getOrderDetailsPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
-  const cart = userUtil.returnCart(req, res, next);
   const orderId = req.params.orderId;
   const fetchedOrderItems = [];
   let fetchedOrder;
   let totalCartPrice = 0;
-
-  if (!user.name) {
-    return res.render('notAuth.ejs', {
-      pageTitle: 'Nu sunteți autentificat.',
-      user: user,
-      cart: cart,
-    });
-  }
 
   User.findByPk(user.id)
     .then((user) => {
@@ -130,13 +105,11 @@ exports.getOrderDetailsPage = (req, res, next) => {
       });
     })
     .then((order) => {
-      return UserAddress.findByPk(fetchedOrder.userAddressId);
+      return UserAddress.findByPk(fetchedOrder.userAddressId, { paranoid: false });
     })
     .then((userAddress) => {
       res.render('admin/order-detail.ejs', {
         pageTitle: `Comanda #${orderId}`,
-        user: user,
-        cart: cart,
         orderItems: fetchedOrderItems,
         totalCartPrice: totalCartPrice.toFixed(2),
         userAddress: userAddress,
@@ -147,8 +120,6 @@ exports.getOrderDetailsPage = (req, res, next) => {
 };
 
 exports.getOrdersStatusPage = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
-  const cart = userUtil.returnCart(req, res, next);
   const orderStatus = req.params.orderStatus;
   let fetchedOrders = [];
 
@@ -163,8 +134,6 @@ exports.getOrdersStatusPage = (req, res, next) => {
       .then((result) => {
         res.render('admin/orders.ejs', {
           pageTitle: 'Comenzi',
-          user: user,
-          cart: cart,
           orders: fetchedOrders,
         });
       })
@@ -182,8 +151,6 @@ exports.getOrdersStatusPage = (req, res, next) => {
       .then((result) => {
         res.render('admin/orders.ejs', {
           pageTitle: 'Comenzi',
-          user: user,
-          cart: cart,
           orders: fetchedOrders,
         });
       })
@@ -201,8 +168,6 @@ exports.getOrdersStatusPage = (req, res, next) => {
       .then((result) => {
         res.render('admin/orders.ejs', {
           pageTitle: 'Comenzi',
-          user: user,
-          cart: cart,
           orders: fetchedOrders,
         });
       })
@@ -220,8 +185,6 @@ exports.getOrdersStatusPage = (req, res, next) => {
       .then((result) => {
         res.render('admin/orders.ejs', {
           pageTitle: 'Comenzi',
-          user: user,
-          cart: cart,
           orders: fetchedOrders,
         });
       })
@@ -230,7 +193,6 @@ exports.getOrdersStatusPage = (req, res, next) => {
 };
 
 exports.postSetOrderSent = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
   const orderId = req.body.orderId;
   const url = req.body.url;
 
@@ -245,7 +207,6 @@ exports.postSetOrderSent = (req, res, next) => {
 };
 
 exports.postSetOrderProcessing = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
   const orderId = req.body.orderId;
   const url = req.body.url;
 
@@ -260,7 +221,6 @@ exports.postSetOrderProcessing = (req, res, next) => {
 };
 
 exports.postSetOrderFinished = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
   const orderId = req.body.orderId;
   const url = req.body.url;
 
@@ -275,7 +235,6 @@ exports.postSetOrderFinished = (req, res, next) => {
 };
 
 exports.postSetOrderCancelled = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
   const orderId = req.body.orderId;
   const url = req.body.url;
 

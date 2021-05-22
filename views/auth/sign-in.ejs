@@ -4,6 +4,18 @@
 <body>
   <%- include('../includes/navigation.ejs') %>
   <main>
+    <div class='my-4'>
+      <% if (errorMessage.length > 0) { %>
+        <div class='user-message error d-flex align-items-center'>
+          <h3><%= errorMessage %></h3>
+        </div>
+      <% } %>
+      <% if (successMessage.length > 0) { %>
+        <div class='user-message success d-flex align-items-center'>
+          <h3><%= successMessage %></h3>
+        </div>
+      <% } %>
+    </div>
     <div class='contaier'>
       <div class='row text-center m-auto'>
         <form class='custom-form' action='/sign-in' method='POST' class="form-control">
@@ -16,13 +28,13 @@
             <input type="password" name='password' id='password' required>
           </div>
 
-          <button type='submit' class="button m-3">Trimite</button>
+          <button type='submit' class="button m-3">Autentificare</button>
           <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
         </form>
 
-        <div class='row text-center m-auto'>
+        <div class='text-center m-auto'>
           <p>Nu aveți un cont?</p>
-          <a href='/sign-up'>Către înregistrare</a>
+          <a class='d-block' href='/sign-up'>Către înregistrare</a>
         </div>
       </div>
     </div>

@@ -21,6 +21,7 @@
                     </svg>
                   </button>
                 </div>
+                <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
               </form>
             </li>
             <% if (user.name) { %>
@@ -92,6 +93,7 @@
                 <form action="/logout" method="POST">
                   <button type='submit' class='logout-button' aria-label="logout-button">Ieși din cont</button>
                   <input type="hidden" name="userId" value='<%= user.id %>'>
+                  <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
                 </form>
               </li>
             <% } %>

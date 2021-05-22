@@ -173,6 +173,19 @@
         </div>
       </section>
 
+      <div class='my-4'>
+        <% if (errorMessage.length > 0) { %>
+          <div class='user-message error d-flex align-items-center'>
+            <h3><%= errorMessage %></h3>
+          </div>
+        <% } %>
+        <% if (successMessage.length > 0) { %>
+          <div class='user-message success d-flex align-items-center'>
+            <h3><%= successMessage %></h3>
+          </div>
+        <% } %>
+      </div>
+
       <section class='mt-5'>
         <% if (reviews.length > 0) { %>
           <ul class='reviews'>

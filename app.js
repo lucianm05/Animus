@@ -4,25 +4,23 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const csrf = require('csurf');
+const flash = require('connect-flash');
 
 const app = express();
 
 const csrfProtection = csrf();
 
 const errorController = require('./controllers/error');
-// Toate rutele
 const shopRoutes = require('./routes/shop');
 const userRoutes = require('./routes/user');
 const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
 
-// Conexiunea la baza de date
 const sequelize = require('./util/database');
-// Store-ul pentru sesiunile de autentificare
 const store = new SequelizeStore({
   db: sequelize,
 });
-// Modelele corespunzătoare aplicației
+
 const User = require('./models/User');
 const Product = require('./models/Product');
 const Cart = require('./models/Cart');
@@ -43,18 +41,15 @@ app.use(
   })
 );
 app.use(csrfProtection);
+app.use(flash());
 
 app.use((req, res, next) => {
-  // Verificăm dacă există un user autentificat
   if (!req.session.userId) {
-    // Dacă nu există, continuăm cu celelalte middleware-uri
     return next();
   }
-  // Dacă există, preluăm id-ul din sesiune, iar apoi căutăm userul corespunzător id-ului în baza de date
   const userId = req.session.userId;
   User.findByPk(userId)
     .then((user) => {
-      // După ce s-a găsit userul, îl setăm în request
       req.user = user;
       return next();
     })
@@ -62,27 +57,20 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  // Dacă există un user autentificat, căutăm coșul de cumpărături care îi aparține
   if (req.user) {
-    // Căutăm coșul în funcție de id-ul userului
     Cart.findOne({ where: { userId: req.user.id } })
       .then((cart) => {
         if (cart) {
-          // Dacă avem un coș de cumpărături, căutăm toate produsele care aparțin coșului
           return CartItem.findAll({ where: { cartId: cart.id } })
             .then((cartItems) => {
-              // Dacă s-au găsit produse, le setăm în fiecare request pentru a le afișa în navbar
               if (cartItems) {
                 req.cart = cartItems;
-                // Dacă nu s-au găsit produse, setăm coșul de cumpărături gol pentru a afișa număru „0” în navbar
               } else {
                 req.cart = [];
               }
-              // Continuăm cu celelalte middleware-uri
               return next();
             })
             .catch((error) => console.log(error));
-          // Dacă nu s-a găsit un coș de cumpărături corespunzător userului, creăm unul
         } else {
           return Cart.create({ userId: req.user.id })
             .then((cart) => {
@@ -125,15 +113,12 @@ app.use((req, res, next) => {
   return next();
 });
 
-// Folosim toate rutele
 app.use(userRoutes);
 app.use(adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
-// Dacă nu s-a găsit pagina în primele rute, utilizatorul este redirecționat pe „Pagina nu a fost găsită”
 app.use(errorController.get404);
 
-// Relațiile corespunzătoare bazei de date
 Product.belongsTo(User, { constraints: true });
 User.hasOne(Cart);
 Product.belongsToMany(Cart, { through: CartItem });
@@ -141,7 +126,7 @@ User.hasMany(CartItem);
 User.hasMany(Order);
 UserAddress.hasMany(Order);
 Product.belongsToMany(Order, { through: OrderItem });
-User.hasMany(UserAddress);
+User.hasMany(UserAddress, { constraints: true });
 Review.belongsTo(User);
 Product.hasMany(Review);
 

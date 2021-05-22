@@ -4,6 +4,12 @@ const citySelect = document.getElementById('city');
 const addressForm = document.getElementById('addressForm');
 const addressFormButton = document.getElementById('addressFormButton');
 
+const userAddresses = document.getElementById('userAddresses');
+const addressesButton = document.getElementById('addressesButton');
+
+const userInfoButton = document.getElementById('userInfoButton');
+const changeUserInfo = document.getElementById('changeUserInfo');
+
 const getCityList = () => {
   citySelect.innerHTML = '';
 
@@ -44,5 +50,23 @@ const showAddressForm = () => {
   }
 };
 
+const showUserAddresses = () => {
+  if (userAddresses.style.display === 'none') {
+    userAddresses.style.display = 'block';
+  } else {
+    userAddresses.style.display = 'none';
+  }
+};
+
+const showChangeUserInfo = () => {
+  if (changeUserInfo.style.display === 'none') {
+    changeUserInfo.style.display = 'block';
+  } else {
+    changeUserInfo.style.display = 'none';
+  }
+};
+
 stateSelect.addEventListener('input', getCityList);
+userInfoButton.addEventListener('click', showChangeUserInfo)
+addressesButton.addEventListener('click', showUserAddresses);
 addressFormButton.addEventListener('click', showAddressForm);

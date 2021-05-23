@@ -1,8 +1,21 @@
-@import 'navbar';
-@import 'config';
-@import 'footer';
 @import '../../node_modules/bootstrap/scss/bootstrap-grid.scss';
 @import '../../node_modules/bootstrap/scss/bootstrap-utilities.scss';
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+
+$dark-blue: #333652;
+$yellow: #fad02c;
+$pewter: #f4f5f6;
+$blue-gray: #90adc6;
+
+$font-stack: 'Source Sans Pro', Tahoma, Verdana;
+
+$main-font-size: 1.4rem;
+$secondary-font-size: 1.25rem;
+
+$xl: 1200px;
+$lg: 992px;
+$md: 768px;
+$sm: 576px;
 
 * {
   box-sizing: border-box;

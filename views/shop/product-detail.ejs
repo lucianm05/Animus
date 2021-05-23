@@ -5,6 +5,19 @@
 <body>
   <%- include('../includes/navigation.ejs') %>
   <main>
+    <div class='mb-4'>
+      <% if (errorMessage.length > 0) { %>
+        <div class='user-message error d-flex align-items-center'>
+          <h3><%= errorMessage %></h3>
+        </div>
+      <% } %>
+      <% if (successMessage.length > 0) { %>
+        <div class='user-message success d-flex align-items-center'>
+          <h3><%= successMessage %></h3>
+        </div>
+      <% } %>
+    </div>
+
     <% if (product) { %>
       <section>
         <div class='product-detail container d-none d-lg-block'>
@@ -45,7 +58,7 @@
                   <% if (user.admin) { %>
                     <div class='col-12 mt-5 d-flex flex-column align-items-center justify-content-center gap-4'>
                       <div>
-                        <button type='button' id='deleteButtonMB' class='button-secondary'>Șterge produsul</button>
+                        <button type='button' id='deleteButton' class='button-secondary'>Șterge produsul</button>
                       </div>
                       <div>
                         <a href="/admin/edit-product/<%= product.id %>" class='button-tertiary' style='text-decoration: none;'>Modifică produsul</a>

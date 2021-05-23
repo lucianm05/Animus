@@ -89,13 +89,15 @@
               </a>
             </li>
             <% if (!user.name) { %>
-              <div class='col-2 col-lg-2 d-none d-lg-block p-0'>
-                <a href="/sign-up">
-                  <div class='d-flex align-items-center justify-content-center'>
-                    <p class='d-none d-lg-block'>Înregistrează-te</p>
-                  </div>
-                </a>
-              </div>              
+              <li class='col-2 col-lg-2 d-none d-lg-block p-0'>
+                <div>
+                  <a href="/sign-up">
+                    <div class='d-flex align-items-center justify-content-center'>
+                      <p class='d-none d-lg-block'>Înregistrează-te</p>
+                    </div>
+                  </a>
+                </div> 
+              </li>     
             <% } %>
             <% if (user.name) { %>
               <li class='col-lg-2 d-none d-lg-block'>

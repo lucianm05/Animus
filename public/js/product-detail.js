@@ -191,12 +191,10 @@ const setRating = (event) => {
 
 const showDeleteDialog = () => {
   if (!showDelDialog) {
-    console.log('show');
     deleteDialog.style.transform = 'translateY(0)';
     backdropProductDetail.style.display = 'block';
     showDelDialog = true;
   } else {
-    console.log('hide');
     deleteDialog.style.transform = 'translateY(-300%)';
     backdropProductDetail.style.display = 'none';
     showDelDialog = false;

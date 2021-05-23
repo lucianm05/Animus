@@ -6,7 +6,7 @@
   <main>
     <div class='my-4'>
       <% if (errorMessage.length > 0) { %>
-        <div class='user-message error d-flex align-items-center'>
+        <div class='user-message error d-flex align-items-center justify-content-center'>
           <h3><%= errorMessage %></h3>
         </div>
       <% } %>
@@ -21,15 +21,30 @@
         <form class='custom-form' action='/sign-up' method='POST' class="form-control">
           <div class='m-3'>
             <label for="username" class='d-block'>Nume de utilizator:</label>
-            <input type="text" name='username' id='username' required>
+            <input
+              type="text" 
+              name='username' 
+              id='username' 
+              value='<%= oldInput.username %>' required>
           </div>
           <div class='m-3'>
             <label for="email" class='d-block'>Email:</label>
-            <input type="email" name='email' id='email' required>
+            <input 
+              class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
+              type="email" 
+              name='email' 
+              id='email' 
+              value='<%= oldInput.email %>' required>
           </div>
           <div class='m-3'>
             <label for="password" class='d-block'>Parola:</label>
-            <input type="password" name='password' id='password' required>
+            <input 
+              class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
+              type="password" 
+              name='password' 
+              id='password' 
+              value='<%= oldInput.password %>' required>
+            <p>Parola trebuie să conțină cel puțin 8 caractere.</p>
           </div>
 
           <button type='submit' class="button m-3">Înregistrare</button>

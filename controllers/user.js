@@ -5,6 +5,7 @@ const UserAddress = require('../models/User-Address');
 const Order = require('../models/Order');
 const OrderItem = require('../models/Order-Item');
 const bcrypt = require('bcryptjs');
+const { validationResult } = require('express-validator/check');
 
 exports.getUserPanelPage = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
@@ -25,6 +26,7 @@ exports.getUserPanelPage = (req, res, next) => {
                   addresses: addresses,
                   errorMessage: req.flash('errorMessage'),
                   successMessage: req.flash('successMessage'),
+                  validationErrors: req.flash('validationErrors'),
                 });
               })
               .catch((error) => console.log(error));
@@ -62,6 +64,21 @@ exports.postEditUsername = (req, res, next) => {
 exports.postEditEmail = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
   const newEmail = req.body.email;
+  const errors = validationResult(req);
+  const errorMessages = [];
+
+  if (!errors.isEmpty()) {
+    errors.array().forEach((err) => {
+      errorMessages.push(err.msg);
+    });
+
+    req.flash('validationErrors', errors.array());
+    req.flash('errorMessage', errorMessages.join('\n'));
+    return req.session.save((err) => {
+      console.log(err);
+      res.redirect('/user-panel');
+    });
+  }
 
   User.findByPk(user.id)
     .then((user) => {
@@ -86,6 +103,21 @@ exports.postEditEmail = (req, res, next) => {
 exports.postEditPassword = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
   const newPassword = req.body.password;
+  const errors = validationResult(req);
+  const errorMessages = [];
+
+  if (!errors.isEmpty()) {
+    errors.array().forEach((err) => {
+      errorMessages.push(err.msg);
+    });
+
+    req.flash('validationErrors', errors.array());
+    req.flash('errorMessage', errorMessages.join('\n'));
+    return req.session.save((err) => {
+      console.log(err);
+      res.redirect('/user-panel');
+    });
+  }
 
   User.findByPk(user.id)
     .then((user) => {
@@ -120,6 +152,7 @@ exports.postEditPassword = (req, res, next) => {
 exports.postUserAddress = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
   const url = req.body.url;
+  const errors = validationResult(req);
   let userCountry = '';
   let userState = '';
   let userCity = '';
@@ -135,6 +168,14 @@ exports.postUserAddress = (req, res, next) => {
   if (req.body.zipCode) userZipCode = req.body.zipCode;
   if (req.body.fullName) userFullName = req.body.fullName;
   if (req.body.phoneNumber) userPhoneNumber = req.body.phoneNumber;
+
+  if (!errors.isEmpty()) {
+    req.flash('errorMessage', errors.array()[0].msg);
+    return req.session.save((err) => {
+      console.log(err);
+      res.redirect('/user-panel');
+    });
+  }
 
   User.findByPk(user.id)
     .then((user) => {
@@ -190,10 +231,10 @@ exports.postSetDefaultUserAddress = (req, res, next) => {
     })
     .then((result) => {
       req.flash('successMessage', 'Adresa a fost setată principală.');
-        return req.session.save((err) => {
-          console.log(err);
-          res.redirect('/user-panel');
-        });
+      return req.session.save((err) => {
+        console.log(err);
+        res.redirect('/user-panel');
+      });
     })
     .catch((error) => console.log(error));
 };

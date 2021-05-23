@@ -10,6 +10,10 @@ router.get('/admin/add-product', guardingUtil.isAdmin, adminController.getAddPro
 
 router.post('/admin/add-product', guardingUtil.isAdmin, adminController.postAddProductPage);
 
+router.get('/admin/edit-product/:prodId', guardingUtil.isAdmin, adminController.getEditProductPage);
+
+router.post('/admin/edit-product', guardingUtil.isAdmin, adminController.postEditProduct);
+
 router.post('/admin/delete-product', guardingUtil.isAdmin, adminController.postDeleteProduct);
 
 router.get('/admin/orders', guardingUtil.isAdmin,adminController.getOrdersPage);

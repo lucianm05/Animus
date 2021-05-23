@@ -41,6 +41,15 @@ main {
     cursor: pointer;
     border: none;
   }
+
+  &-tertiary {
+    color: $dark-blue;
+    font-size: $main-font-size;
+    background-color: transparent;
+    border: 1px solid $dark-blue;
+    cursor: pointer;
+    padding: 5px 10px;
+  }
 }
 
 .custom-form { 
@@ -61,6 +70,10 @@ main {
     border: 1px solid $dark-blue;
     padding: 5px;
     font-size: $secondary-font-size;
+  }
+
+  .invalid {
+    border-color: red;
   }
 }
 
@@ -151,6 +164,10 @@ main {
 }
 
 @media (max-width: $md) {
+  main {
+    width: 85%;
+  }
+
 
   .custom-form {
     width: 85%;
@@ -158,8 +175,15 @@ main {
 }
 
 @media (max-width: $sm) {
+  main {
+    width: 95%;
+  }
 
   .custom-form {
     width: 100%;
+  }
+
+  .user-message {
+    width: 250px;
   }
 }

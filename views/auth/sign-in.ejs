@@ -21,11 +21,22 @@
         <form class='custom-form' action='/sign-in' method='POST' class="form-control">
           <div class='m-3'>
             <label for="email" class='d-block'>Email:</label>
-            <input type="email" name='email' id='email' required>
+            <input 
+              class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
+              type="email" 
+              name='email' 
+              id='email' 
+              value='<%= oldInput.email %>' required>
           </div>
           <div class='m-3'>
             <label for="password" class='d-block'>Parola:</label>
-            <input type="password" name='password' id='password' required>
+            <input 
+              class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
+              type="password" 
+              name='password' 
+              id='password' 
+              value='<%= oldInput.password %>' required>
+            <p>Parola trebuie să conțină cel puțin 8 caractere.</p>
           </div>
 
           <button type='submit' class="button m-3">Autentificare</button>

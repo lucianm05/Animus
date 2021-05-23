@@ -1,11 +1,18 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const { validationResult } = require('express-validator/check');
 
 exports.getSignUpPage = (req, res, next) => {
   res.render('auth/sign-up.ejs', {
     pageTitle: 'Înregistrare',
     errorMessage: req.flash('errorMessage'),
     successMessage: req.flash('successMessage'),
+    oldInput: {
+      username: '',
+      email: '',
+      password: '',
+    },
+    validationErrors: [],
   });
 };
 
@@ -14,6 +21,12 @@ exports.getSignInPage = (req, res, next) => {
     pageTitle: 'Autentificare',
     errorMessage: req.flash('errorMessage'),
     successMessage: req.flash('successMessage'),
+    oldInput: {
+      username: '',
+      email: '',
+      password: '',
+    },
+    validationErrors: [],
   });
 };
 
@@ -21,6 +34,26 @@ exports.postSignUp = (req, res, next) => {
   const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
+  const errors = validationResult(req);
+  const errorMessages = [];
+
+  if (!errors.isEmpty()) {
+    errors.array().forEach((err) => {
+      errorMessages.push(err.msg);
+    });
+
+    return res.status(402).render('auth/sign-up.ejs', {
+      pageTitle: 'Înregistrare',
+      errorMessage: errorMessages.join('\n'),
+      successMessage: req.flash('successMessage'),
+      oldInput: {
+        username: username,
+        email: email,
+        password: password,
+      },
+      validationErrors: errors.array(),
+    });
+  }
 
   User.findOne({ where: { email: email } })
     .then((user) => {
@@ -29,7 +62,7 @@ exports.postSignUp = (req, res, next) => {
         return req.session.save((error) => {
           console.log(error);
           res.redirect('/sign-up');
-        })
+        });
       } else {
         return bcrypt
           .hash(password, 12)
@@ -46,7 +79,7 @@ exports.postSignUp = (req, res, next) => {
               return req.session.save((error) => {
                 console.log(error);
                 res.redirect('/sign-in');
-              })
+              });
             }
           });
       }
@@ -57,6 +90,26 @@ exports.postSignUp = (req, res, next) => {
 exports.postSignIn = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
+  const errors = validationResult(req);
+  const errorMessages = [];
+
+  if (!errors.isEmpty()) {
+    errors.array().forEach((err) => {
+      errorMessages.push(err.msg);
+    });
+
+    return res.status(402).render('auth/sign-in.ejs', {
+      pageTitle: 'Autentificare',
+      errorMessage: errorMessages.join('\n'),
+      successMessage: req.flash('successMessage'),
+      oldInput: {
+        username: '',
+        email: email,
+        password: password,
+      },
+      validationErrors: errors.array(),
+    });
+  }
 
   User.findOne({ where: { email: email } })
     .then((user) => {
@@ -65,7 +118,7 @@ exports.postSignIn = (req, res, next) => {
         return req.session.save((error) => {
           console.log(error);
           res.redirect('/sign-in');
-        })
+        });
       } else {
         bcrypt
           .compare(password, user.password)
@@ -82,7 +135,7 @@ exports.postSignIn = (req, res, next) => {
             return req.session.save((error) => {
               console.log(error);
               res.redirect('/sign-in');
-            })
+            });
           })
           .catch((error) => console.log(error));
       }

@@ -37,7 +37,53 @@ exports.postAddProductPage = (req, res, next) => {
       return req.session.save((err) => {
         console.log(err);
         res.redirect('/admin/add-product');
-      })
+      });
+    })
+    .catch((error) => console.log(error));
+};
+
+exports.getEditProductPage = (req, res, next) => {
+  const prodId = req.params.prodId;
+
+  Product.findByPk(prodId)
+    .then((product) => {
+      res.render('admin/edit-product.ejs', {
+        pageTitle: `Modifică produsul #${prodId}`,
+        product: product,
+        errorMessage: req.flash('errorMessage'),
+        successMessage: req.flash('successMessage'),
+      });
+    })
+    .catch((error) => console.log(error));
+};
+
+exports.postEditProduct = (req, res, next) => {
+  const prodId = req.body.prodId;
+  const productName = req.body.name;
+  const productImage = req.body.image;
+  const productPrice = req.body.price;
+  const productDescription = req.body.description;
+  const animalCategory = req.body.animalCategory;
+  const productType = req.body.productType;
+  const url = req.body.url;
+
+  Product.findOne({ where: { id: prodId, name: productName } })
+    .then((product) => {
+      product.update({
+        name: productName,
+        image: productImage,
+        price: productPrice,
+        description: productDescription,
+        animalCategory: animalCategory,
+        productType: productType,
+      });
+    })
+    .then((result) => {
+      req.flash('successMessage', 'Produsul a fost modificat.');
+      return req.session.save((err) => {
+        console.log(err);
+        res.redirect(url);
+      });
     })
     .catch((error) => console.log(error));
 };
@@ -54,7 +100,7 @@ exports.postDeleteProduct = (req, res, next) => {
       return req.session.save((err) => {
         console.log(err);
         res.redirect('/');
-      })
+      });
     })
     .catch((error) => {
       console.log(error);

@@ -43,8 +43,13 @@
                     </form>
                   </div>
                   <% if (user.admin) { %>
-                    <div class='col-12 mt-5'>
-                      <button type='button' id='deleteButton' class='button-secondary'>Șterge produsul</button>
+                    <div class='col-12 mt-5 d-flex flex-column align-items-center justify-content-center gap-4'>
+                      <div>
+                        <button type='button' id='deleteButtonMB' class='button-secondary'>Șterge produsul</button>
+                      </div>
+                      <div>
+                        <a href="/admin/edit-product/<%= product.id %>" class='button-tertiary' style='text-decoration: none;'>Modifică produsul</a>
+                      </div>
                     </div>
                   <% } %>
                 </div>
@@ -57,7 +62,7 @@
           <div class='w-100 text-center'>
             <h1><%= product.name %></h1>
           </div>
-          <div class='d-flex gap-3 align-items-center justify-content-center'>
+          <div class='d-flex flex-column align-items-center justify-content-center'>
             <%- include('../includes/rating-stars.ejs') %>
             <p>
               <% if(isNaN(rating)) { %>
@@ -89,8 +94,13 @@
               </form>
             </div>
             <% if (user.admin) { %>
-              <div class='mt-5'>
-                <button type='button' id='deleteButtonMB' class='button-secondary'>Șterge produsul</button>
+              <div class='mt-5 d-flex flex-column align-items-center justify-content-center'>
+                <div class='mb-2'>
+                  <button type='button' id='deleteButtonMB' class='button-secondary'>Șterge produsul</button>
+                </div>
+                <div class='mt-2'>
+                  <a href="/admin/edit-product/<%= product.id %>" class='button-tertiary' style='text-decoration: none;'>Modifică produsul</a>
+                </div>
               </div>
             <% } %>
           </div>

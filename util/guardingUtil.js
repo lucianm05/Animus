@@ -1,6 +1,6 @@
 const userUtil = require('./userUtil');
 
-exports.isLoggednIn = (req, res, next) => {
+exports.isLoggedIn = (req, res, next) => {
   const user = userUtil.returnUser(req, res, next);
   const cart = userUtil.returnCart(req, res, next);
 

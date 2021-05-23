@@ -204,7 +204,7 @@ exports.getProductDetailPage = (req, res, next) => {
   let prod;
   let rating = 0;
 
-  Product.findByPk(productId)
+  Product.findByPk(productId, { paranoid: false })
     .then((product) => {
       prod = product;
       return Review.findAll({ where: { productId: product.id }, include: User });
@@ -337,7 +337,7 @@ exports.postFinishOrder = (req, res, next) => {
       return req.session.save((err) => {
         console.log(err);
         res.redirect('/cart');
-      })
+      });
     })
     .catch((error) => console.log(error));
 };

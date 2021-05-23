@@ -131,8 +131,8 @@ Review.belongsTo(User);
 Product.hasMany(Review);
 
 sequelize
-  // .sync({force: true})
-  .sync()
+  .sync({force: true})
+  // .sync()
   .then((result) => {
     app.listen(3000);
   })

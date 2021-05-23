@@ -42,11 +42,19 @@
               <div class='container text-center my-3'>
                 <div class="row">
                   <div class="col-6 d-flex align-items-center justify-content-center">
-                    <p><%= product.price %> RON</p>
+                    <% if (!product.deletedAt) { %>
+                      <p><%= product.price %> RON</p>
+                    <% } else { %>
+
+                    <% } %>
                   </div>
                   <div class="col-6">
                     <form class='w-100' action='/add-to-cart' method='POST'>
-                      <button type='submit' class='button'>Adaugă în coș</button>
+                      <% if (product.deletedAt) { %>
+                        <p>Produsul nu mai este disponibil</p> 
+                      <% } else { %>
+                        <button type='submit' class='button'>Adaugă în coș</button>
+                      <% } %>
                       <input type="hidden" name='prodId' id='productId' value='<%= product.id %>'>
                       <input type="hidden" name="prodName" id='productName' value='<%= product.name %>'>
                       <input type="hidden" name="prodPrice" value='<%= product.price %>'>
@@ -55,7 +63,7 @@
                       <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
                     </form>
                   </div>
-                  <% if (user.admin) { %>
+                  <% if (user.admin && !product.deletedAt) { %>
                     <div class='col-12 mt-5 d-flex flex-column align-items-center justify-content-center gap-4'>
                       <div>
                         <button type='button' id='deleteButton' class='button-secondary'>Șterge produsul</button>
@@ -93,11 +101,19 @@
           <hr class='w-100'>
           <div class='d-flex flex-column gap-2 align-items-center justify-content-center'>
             <div>
-              <p><%= product.price %> RON</p>
+              <% if (!product.deletedAt) { %>
+                <p><%= product.price %> RON</p>
+              <% } else { %>
+                
+              <% } %>
             </div>
             <div>
               <form class='w-100' action='/add-to-cart' method='POST'>
-                <button type='submit' class='button'>Adaugă în coș</button>
+                <% if (product.deletedAt) { %>
+                  <p>Produsul nu mai este disponibil</p> 
+                <% } else { %>
+                  <button type='submit' class='button'>Adaugă în coș</button>
+                <% } %>
                 <input type="hidden" name='prodId' id='productId' value='<%= product.id %>'>
                 <input type="hidden" name="prodName" id='productName' value='<%= product.name %>'>
                 <input type="hidden" name="prodPrice" value='<%= product.price %>'>
@@ -106,7 +122,7 @@
                 <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
               </form>
             </div>
-            <% if (user.admin) { %>
+            <% if (user.admin && !product.deletedAt) { %>
               <div class='mt-5 d-flex flex-column align-items-center justify-content-center'>
                 <div class='mb-2'>
                   <button type='button' id='deleteButtonMB' class='button-secondary'>Șterge produsul</button>

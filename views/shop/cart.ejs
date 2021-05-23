@@ -156,11 +156,11 @@
               <section class='address-info my-3 d-flex flex-column align-items-center justify-content-center text-center'>
                 <div class='d-flex flex-row align-items-center justify-content-center mb-3'>
                   <h3>Adaugă o adresă</h3>
-                    <svg id='addressFormButton' xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-plus" viewBox="0 0 16 16">
+                    <svg id='addressFormButtonCart' xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-plus" viewBox="0 0 16 16">
                       <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
                     </svg>
                 </div>
-                <form action='/add-user-address' method='post' id='addressForm' style='display: none;'>
+                <form action='/add-user-address' method='post' id='addressFormCart' style='display: none;'>
                   <div class='mb-3'>
                     <label class='d-block' for="country">Țara</label>
                     <select name="country" id="country" required>
@@ -214,8 +214,5 @@
       <% } %>
     </section>
   </main>
-  <% if (!(addresses.length > 0)) { %>
-    <script src='/js/user-panel.js'></script>
-  <% } %>
   <script src="/js/cart.js"></script>
 <%- include('../includes/end.ejs') %>

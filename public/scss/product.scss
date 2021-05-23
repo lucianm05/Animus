@@ -23,7 +23,7 @@
       font-size: $main-font-size;
 
       &:nth-of-type(1) {
-        height: 6rem;
+        height: 8rem;
       }
 
       &:nth-of-type(2) {
@@ -85,6 +85,10 @@
 
     .product-card {
       width: 8rem;
+
+      p:nth-of-type(1) {
+        height: 7rem;
+      }
 
       img {
         width: 8rem;

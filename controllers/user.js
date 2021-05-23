@@ -80,22 +80,34 @@ exports.postEditEmail = (req, res, next) => {
     });
   }
 
-  User.findByPk(user.id)
-    .then((user) => {
-      if (user.email !== newEmail) {
-        user.update({ email: newEmail });
-        req.flash('successMessage', 'Adresa de email a fost schimbată cu succes.');
-        return req.session.save((error) => {
-          console.log(error);
+  User.findOne({ where: { email: newEmail } })
+    .then((existingUser) => {
+      if (existingUser) {
+        req.flash('errorMessage', 'Adresa de email este deja folosită.');
+        return req.session.save((err) => {
+          console.log(err);
           res.redirect('/user-panel');
         });
-      }
+      } else {
+        User.findByPk(user.id)
+          .then((user) => {
+            if (user.email !== newEmail) {
+              user.update({ email: newEmail });
+              req.flash('successMessage', 'Adresa de email a fost schimbată cu succes.');
+              return req.session.save((error) => {
+                console.log(error);
+                res.redirect('/user-panel');
+              });
+            }
 
-      req.flash('errorMessage', 'Adresa de email nu poate fi egală cu cea veche.');
-      return req.session.save((error) => {
-        console.log(error);
-        res.redirect('/user-panel');
-      });
+            req.flash('errorMessage', 'Adresa de email nu poate fi egală cu cea veche.');
+            return req.session.save((error) => {
+              console.log(error);
+              res.redirect('/user-panel');
+            });
+          })
+          .catch((error) => console.log(error));
+      }
     })
     .catch((error) => console.log(error));
 };

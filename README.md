@@ -1,4 +1,4 @@
-- EN -
+ # - EN -
 
 # Animus is a personal project which I made to learn web development.
 I made it all by myself, front-end and back-end.
@@ -8,7 +8,7 @@ Back-end: Node.js Express.js, MySQL, Sequelize, bcryptjs to hash user passwords,
 
 
 
-- RO -
+ # - RO -
 
 # Animus este un proiect personal pe care l-am făcut pentru a învăța dezvoltare web.
 Este făcut în totalitate de mine, atât front-end cât și back-end.

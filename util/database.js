@@ -1,5 +1,10 @@
 const Sequelize = require('sequelize').Sequelize;
+const dotenv = require('dotenv').config();
 
-const sequelize = new Sequelize('petshop', 'root', '05PH04ZVKANIMUS2001', { dialect: 'mysql', host: 'localhost'});
+const dbName = process.env.DBNAME;
+const dbUser = process.env.DBUSER;
+const dbPassword = process.env.DBPASS;
+
+const sequelize = new Sequelize(dbName, dbUser, dbPassword, { dialect: 'mysql', host: 'localhost'});
 
 module.exports = sequelize;

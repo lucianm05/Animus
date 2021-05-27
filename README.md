@@ -1,5 +1,7 @@
  # - EN -
 
+Presentation: https://www.youtube.com/watch?v=oI0XAtqbgf8
+
 # Animus is a personal project which I made to learn web development.
 I made it all by myself, front-end and back-end.
 
@@ -11,6 +13,8 @@ Back-end: Node.js Express.js, MySQL, Sequelize, bcryptjs to hash user passwords,
 
  # - RO -
 
+Videoclip de prezentare: https://www.youtube.com/watch?v=oI0XAtqbgf8
+
 # Animus este un proiect personal pe care l-am făcut pentru a învăța dezvoltare web.
 Este făcut în totalitate de mine, atât front-end cât și back-end.
 
@@ -18,4 +22,4 @@ Front-end: EJS, Sass, Bootstrap, JavaScript + Fetch pentru a comunica cu un REST
 
 Back-end: Node.js Express.js, MySQL, Sequelize, bcryptjs pentru parolele utilizatorilor, csurf pentru a spori securitatea împotriva atacurilor CSRF, incluzând un CSRF Token în fiecare request, connect-flash pentru mesajele de succes și de eroare, express-validator pentru a valida input-ul introdus de utilizatori.
 
-https://www.youtube.com/watch?v=oI0XAtqbgf8
+

@@ -1,10 +1,14 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const csrf = require('csurf');
 const flash = require('connect-flash');
+const helmet = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
 
 const app = express();
 
@@ -30,16 +34,23 @@ const OrderItem = require('./models/Order-Item');
 const UserAddress = require('./models/User-Address');
 const Review = require('./models/Review');
 
+const accessLogStream = fs.createWriteStream(path.join(process.cwd(), 'access.log'), { flags: 'a' });
+
+app.use(helmet());
+app.use(compression());
+app.use(morgan('combined', { stream: accessLogStream }));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(process.cwd(), 'public')));
 app.use(
   session({
-    secret: '2kfd2Hj5iC7kg90A43nL',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: store,
   })
 );
+
 app.use(csrfProtection);
 app.use(flash());
 
@@ -134,6 +145,6 @@ sequelize
   // .sync({force: true})
   .sync()
   .then((result) => {
-    app.listen(3000);
+    app.listen(process.env.PORT || 3000);
   })
   .catch((error) => console.log(error));

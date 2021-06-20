@@ -19,6 +19,8 @@ router.post('/sign-in',
   check('password', 'Parola introdusă trebuie să fie lungă de cel puțin 8 caractere.').isLength({min: 8}),
   authController.postSignIn);
 
+router.post('/login-test-user', authController.postSignInTestUser);
+
 router.post('/logout', authController.postLogout);
 
 module.exports = router;

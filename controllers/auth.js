@@ -42,7 +42,7 @@ exports.postSignUp = (req, res, next) => {
       errorMessages.push(err.msg);
     });
 
-    return res.status(402).render('auth/sign-up.ejs', {
+    return res.render('auth/sign-up.ejs', {
       pageTitle: 'Înregistrare',
       errorMessage: errorMessages.join('\n'),
       successMessage: req.flash('successMessage'),
@@ -98,7 +98,7 @@ exports.postSignIn = (req, res, next) => {
       errorMessages.push(err.msg);
     });
 
-    return res.status(402).render('auth/sign-in.ejs', {
+    return res.render('auth/sign-in.ejs', {
       pageTitle: 'Autentificare',
       errorMessage: errorMessages.join('\n'),
       successMessage: req.flash('successMessage'),
@@ -143,6 +143,27 @@ exports.postSignIn = (req, res, next) => {
     .catch((error) => {
       console.log(error);
     });
+};
+
+exports.postSignInTestUser = (req, res, next) => {
+  User.findOne({ where: { testUser: true } })
+    .then(user => {
+      if (!user) {
+        req.flash('errorMessage', 'Utilizatorul nu a fost găsit.');
+        return req.session.save((error) => {
+          console.log(error);
+          res.redirect('/sign-in');
+        });
+      } else {
+        req.session.loggedId = true;
+        req.session.userId = user.id;
+        return req.session.save((err) => {
+          console.log(err);
+          res.status(200).redirect('/');
+        });
+      }
+    })
+    .catch((error) => console.log(error));
 };
 
 exports.postLogout = (req, res, next) => {

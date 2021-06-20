@@ -38,11 +38,23 @@
               </svg>
             </div>
             <div id='changeUserInfo' style='display: none;'>
-              <form class='my-3' action='/edit-username' method='POST'>
-                <div>
+              <form class='my-5' action='/edit-username' method='POST'>
+                <div class='mb-2'>
                   <label class='d-block'>Schimbare nume utilizator</label>
                   <div class='d-flex flex-row align-items-center justify-content-center'>
                     <input type="text" name='name' placeholder="Introdu noul nume de utilizator">
+                    <button type='button'>
+                      <svg aria-label="edit-user-info-button" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#333652" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                        <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class='mt-2'>
+                  <label class='d-block'>Confirmă parola actuală</label>
+                  <div class='d-flex flex-row align-items-center justify-content-center'>
+                    <input type="password" name='currentPassword' placeholder="Parola actuală">
                     <button type='submit'>
                       <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-check" viewBox="0 0 16 16">
                         <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
@@ -52,7 +64,7 @@
                 </div>
                 <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
               </form>
-              <form class='my-4' action='/edit-email' method='POST' novalidate>
+              <form class='my-5' action='/edit-email' method='POST' novalidate>
                 <div>
                   <label class='d-block'>Schimbare email</label>
                   <div class='d-flex flex-row align-items-center justify-content-center'>
@@ -61,6 +73,18 @@
                       type="email" 
                       name='email' 
                       placeholder="Introdu noua adresă de email">
+                    <button type='button'>
+                      <svg aria-label="edit-user-info-button" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#333652" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                        <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class='mt-2'>
+                  <label class='d-block'>Confirmă parola actuală</label>
+                  <div class='d-flex flex-row align-items-center justify-content-center'>
+                    <input type="password" name='currentPassword' placeholder="Parola actuală">
                     <button type='submit'>
                       <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-check" viewBox="0 0 16 16">
                         <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
@@ -70,7 +94,7 @@
                 </div>
                 <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
               </form>
-              <form class='my-4' action='/edit-password' method='POST' novalidate>
+              <form class='my-5' action='/edit-password' method='POST' novalidate>
                 <div>
                   <label class='d-block'>Schimbare parolă</label>
                   <div class='d-flex flex-row align-items-center justify-content-center'>
@@ -79,11 +103,23 @@
                         type="password" 
                         name='password' 
                         placeholder="Introdu noua parolă">
-                      <button type='submit'>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-check" viewBox="0 0 16 16">
-                          <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                      <button type='button'>
+                        <svg aria-label="edit-user-info-button" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#333652" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                          <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                         </svg>
                       </button>
+                  </div>
+                </div>
+                <div class='mt-2'>
+                  <label class='d-block'>Confirmă parola actuală</label>
+                  <div class='d-flex flex-row align-items-center justify-content-center'>
+                    <input type="password" name='currentPassword' placeholder="Parola actuală">
+                    <button type='submit'>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="#333652" class="bi bi-check" viewBox="0 0 16 16">
+                        <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                      </svg>
+                    </button>
                   </div>
                 </div>
                 <input type="hidden" name="_csrf" value='<%= csrfToken %>'>

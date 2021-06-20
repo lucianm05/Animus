@@ -5,6 +5,7 @@ const OrderItem = require('../models/Order-Item');
 const User = require('../models/User');
 const UserAddress = require('../models/User-Address');
 const CartItem = require('../models/Cart-Item');
+const { validationResult } = require('express-validator/check');
 
 exports.getAddProductPage = (req, res, next) => {
   res.render('admin/add-product.ejs', {
@@ -15,6 +16,25 @@ exports.getAddProductPage = (req, res, next) => {
 };
 
 exports.postAddProductPage = (req, res, next) => {
+  const errors = validationResult(req);
+  const errorMessages = [];
+
+  if (!errors.isEmpty()) {
+    console.log(errors);
+    errors.array().forEach((err) => {
+      errorMessages.push(err.msg);
+    });
+
+    req.flash('validationErrors', errors.array());
+    req.flash('errorMessage', errorMessages.join('\n'));
+    return req.session.save((err) => {
+      console.log(err);
+      res.redirect('/admin/add-product');
+    });
+  }
+
+  console.log(req.body);
+
   const user = userUtil.returnUser(req, res, next);
   const productName = req.body.name;
   const productImage = req.body.image;
@@ -58,6 +78,24 @@ exports.getEditProductPage = (req, res, next) => {
 };
 
 exports.postEditProduct = (req, res, next) => {
+  const errors = validationResult(req);
+  const errorMessages = [];
+
+  if (!errors.isEmpty()) {
+    errors.array().forEach((err) => {
+      errorMessages.push(err.msg);
+    });
+
+    req.flash('validationErrors', errors.array());
+    req.flash('errorMessage', errorMessages.join('\n'));
+    return req.session.save((err) => {
+      console.log(err);
+      res.redirect('/admin/add-product');
+    });
+  }
+
+  console.log(req.body);
+
   const prodId = req.body.prodId;
   const productName = req.body.name;
   const productImage = req.body.image;

@@ -48,6 +48,25 @@
         </div>
       </div>
     </div>
+    
+    <div class='mt-5 text-center'>
+      <div>
+        <p>Autentificați-vă cu un cont de test</p>
+      </div>
+      <div>
+        <div>
+          <div class='my-2'>
+            <p>johndoe</p>
+          </div>
+          <div class='mt-3'>
+            <form action="/login-test-user" method="POST">
+              <button type='submit' class='button-tertiary'>Autentificare</button>
+              <input type="hidden" name="_csrf" value='<%= csrfToken %>'>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 
 <%- include('../includes/end.ejs') %>

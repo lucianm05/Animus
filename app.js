@@ -48,6 +48,9 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: store,
+    cookie: {
+      maxAge: 1800000,
+    },
   })
 );
 
@@ -127,7 +130,7 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src-elem 'self' *; style-src 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; connect-src 'self' https://roloca.coldfuse.io/; img-src 'self' https:");
   next();
-})
+});
 
 app.use(userRoutes);
 app.use(adminRoutes);

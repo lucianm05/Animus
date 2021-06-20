@@ -38,32 +38,6 @@ exports.getUserPanelPage = (req, res, next) => {
 };
 
 exports.postEditUsername = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
-  const newUsername = req.body.name;
-
-  User.findByPk(user.id)
-    .then((user) => {
-      if (user.name !== newUsername) {
-        user.update({ name: newUsername });
-        req.flash('successMessage', 'Numele de utilizator a fost schimbat cu succes.');
-        return req.session.save((error) => {
-          console.log(error);
-          res.redirect('/user-panel');
-        });
-      }
-
-      req.flash('errorMessage', 'Numele de utilizator nu poate fi egal cu cel vechi.');
-      return req.session.save((error) => {
-        console.log(error);
-        res.redirect('/user-panel');
-      });
-    })
-    .catch((error) => console.log(error));
-};
-
-exports.postEditEmail = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
-  const newEmail = req.body.email;
   const errors = validationResult(req);
   const errorMessages = [];
 
@@ -79,6 +53,61 @@ exports.postEditEmail = (req, res, next) => {
       res.redirect('/user-panel');
     });
   }
+
+  const user = userUtil.returnUser(req, res, next);
+  const newUsername = req.body.name;
+  const currentPassword = req.body.currentPassword;
+
+  User.findByPk(user.id)
+    .then((user) => {
+      if (user.name !== newUsername) {
+        bcrypt.compare(currentPassword, user.password).then((doMatch) => {
+          if (doMatch) {
+            user.update({ name: newUsername });
+            req.flash('successMessage', 'Numele de utilizator a fost schimbat cu succes.');
+            return req.session.save((error) => {
+              console.log(error);
+              res.redirect('/user-panel');
+            });
+          } else {
+            req.flash('errorMessage', 'Parola introdusă nu corespunde cu cea actuală.');
+            return req.session.save((error) => {
+              console.log(error);
+              res.redirect('/user-panel');
+            });
+          }
+        });
+      } else {
+        req.flash('errorMessage', 'Numele de utilizator nu poate fi egal cu cel vechi.');
+        return req.session.save((error) => {
+          console.log(error);
+          res.redirect('/user-panel');
+        });
+      }
+    })
+    .catch((error) => console.log(error));
+};
+
+exports.postEditEmail = (req, res, next) => {
+  const errors = validationResult(req);
+  const errorMessages = [];
+
+  if (!errors.isEmpty()) {
+    errors.array().forEach((err) => {
+      errorMessages.push(err.msg);
+    });
+
+    req.flash('validationErrors', errors.array());
+    req.flash('errorMessage', errorMessages.join('\n'));
+    return req.session.save((err) => {
+      console.log(err);
+      res.redirect('/user-panel');
+    });
+  }
+
+  const user = userUtil.returnUser(req, res, next);
+  const newEmail = req.body.email;
+  const currentPassword = req.body.currentPassword;
 
   User.findOne({ where: { email: newEmail } })
     .then((existingUser) => {
@@ -89,32 +118,38 @@ exports.postEditEmail = (req, res, next) => {
           res.redirect('/user-panel');
         });
       } else {
-        User.findByPk(user.id)
-          .then((user) => {
-            if (user.email !== newEmail) {
-              user.update({ email: newEmail });
-              req.flash('successMessage', 'Adresa de email a fost schimbată cu succes.');
-              return req.session.save((error) => {
-                console.log(error);
-                res.redirect('/user-panel');
-              });
-            }
-
+        User.findByPk(user.id).then((user) => {
+          if (user.email !== newEmail) {
+            bcrypt.compare(currentPassword, user.password).then((doMatch) => {
+              if (doMatch) {
+                user.update({ email: newEmail });
+                req.flash('successMessage', 'Adresa de email a fost schimbată cu succes.');
+                return req.session.save((error) => {
+                  console.log(error);
+                  res.redirect('/user-panel');
+                });
+              } else {
+                req.flash('errorMessage', 'Parola introdusă nu corespunde cu cea actuală.');
+                return req.session.save((error) => {
+                  console.log(error);
+                  res.redirect('/user-panel');
+                });
+              }
+            });
+          } else {
             req.flash('errorMessage', 'Adresa de email nu poate fi egală cu cea veche.');
             return req.session.save((error) => {
               console.log(error);
               res.redirect('/user-panel');
             });
-          })
-          .catch((error) => console.log(error));
+          }
+        });
       }
     })
     .catch((error) => console.log(error));
 };
 
 exports.postEditPassword = (req, res, next) => {
-  const user = userUtil.returnUser(req, res, next);
-  const newPassword = req.body.password;
   const errors = validationResult(req);
   const errorMessages = [];
 
@@ -131,32 +166,40 @@ exports.postEditPassword = (req, res, next) => {
     });
   }
 
+  const user = userUtil.returnUser(req, res, next);
+  const newPassword = req.body.password;
+  const currentPassword = req.body.currentPassword;
+
   User.findByPk(user.id)
     .then((user) => {
-      bcrypt
-        .compare(newPassword, user.password)
-        .then((doMatch) => {
-          if (doMatch) {
-            req.flash('errorMessage', 'Parola nouă nu poate fi egală cu cea veche.');
-            return req.session.save((error) => {
-              console.log(error);
-              res.redirect('/user-panel');
-            });
-          }
-
-          bcrypt
-            .hash(newPassword, 12)
-            .then((hashedPassword) => {
-              user.update({ password: hashedPassword });
-              req.flash('successMessage', 'Parola a fost schimbată.');
+      bcrypt.compare(newPassword, user.password).then((doMatch) => {
+        if (doMatch) {
+          req.flash('errorMessage', 'Parola nouă nu poate fi egală cu cea veche.');
+          return req.session.save((error) => {
+            console.log(error);
+            res.redirect('/user-panel');
+          });
+        } else {
+          bcrypt.compare(currentPassword, user.password).then((doMatch) => {
+            if (doMatch) {
+              bcrypt.hash(newPassword, 12).then((hashedPassword) => {
+                user.update({ password: hashedPassword });
+                req.flash('successMessage', 'Parola a fost schimbată.');
+                return req.session.save((error) => {
+                  console.log(error);
+                  res.redirect('/user-panel');
+                });
+              });
+            } else {
+              req.flash('errorMessage', 'Parola introdusă nu corespunde cu cea actuală.');
               return req.session.save((error) => {
                 console.log(error);
                 res.redirect('/user-panel');
               });
-            })
-            .catch((error) => console.log(error));
-        })
-        .catch((error) => console.log(error));
+            }
+          });
+        }
+      });
     })
     .catch((error) => console.log(error));
 };
@@ -333,3 +376,4 @@ exports.postCancelUserOrder = (req, res, next) => {
     })
     .catch((error) => console.log(error));
 };
+

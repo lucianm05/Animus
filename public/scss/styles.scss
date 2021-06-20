@@ -46,6 +46,11 @@ main {
   cursor: pointer;
   border: none;
 
+  &:hover {
+    color: $dark-blue;
+    background-color: $yellow;
+  }
+
   &-secondary {
     color: $dark-blue;
     font-size: $main-font-size;
@@ -53,6 +58,11 @@ main {
     padding: 5px 10px;
     cursor: pointer;
     border: none;
+
+    &:hover {
+      color: $blue-gray;
+      background-color: $dark-blue;
+    }
   }
 
   &-tertiary {
@@ -62,6 +72,11 @@ main {
     border: 1px solid $dark-blue;
     cursor: pointer;
     padding: 5px 10px;
+
+    &:hover {
+      color: $pewter;
+      background-color: $dark-blue;
+    }
   }
 }
 

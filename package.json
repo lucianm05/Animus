@@ -21,7 +21,14 @@
     "sequelize": "^6.6.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "babel-loader": "^8.2.2",
+    "css-loader": "^5.2.6",
+    "nodemon": "^2.0.7",
+    "style-loader": "^2.0.0",
+    "svg-inline-loader": "^0.8.2",
+    "webpack": "^5.40.0",
+    "webpack-cli": "^4.7.2",
+    "webpack-node-externals": "^3.0.0"
   },
   "name": "shop",
   "version": "1.0.0",
@@ -32,7 +39,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "start:dev": "nodemon app.js"
+    "start:dev": "nodemon app.js",
+    "build": "set NODE_ENV=production&&webpack"
   },
   "keywords": [],
   "author": "",

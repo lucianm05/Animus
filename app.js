@@ -128,7 +128,7 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src-elem 'self' *; style-src 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; connect-src 'self' https://roloca.coldfuse.io/; img-src 'self' https:");
+  res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src-elem 'unsafe-inline' *; style-src 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; connect-src 'self' https://roloca.coldfuse.io/; img-src 'self' https:");
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');

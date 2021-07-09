@@ -2,7 +2,7 @@ const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
-  entry: './js/service-worker.js',
+  entry: './js/script.js',
   target: 'node',
   externals: [nodeExternals()],
   module: {
@@ -14,7 +14,7 @@ module.exports = {
   },
   output: {
     path: path.join(process.cwd(), 'public', 'js'),
-    filename: 'service-worker.js',
+    filename: 'script.js',
   },
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
 };
